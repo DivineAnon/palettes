@@ -393,6 +393,15 @@ export default function PopupSaveGradient(){
     const getGradientPreview = () => {
         return `${type}-gradient(${type==='linear' ? rotation+'deg' : 'circle'}, ${colors.map(obj=>[`#${obj.color} ${obj.position}%`]).join(',')}`;
     }
+    const handleRemoveColor = () => {
+        const newData = [...colors].filter((el,i)=>i!==focusColor.index);
+        const newIndex = [];
+        newData.forEach((data,i)=>{
+            newIndex.push({ ...data, index: i });
+        })
+        setColors(newIndex);
+        setFocusColor(newIndex[0]);
+    }
     useLayoutEffect(()=>{
         let style = document.querySelector('[data="slider"]');
         let input = document.querySelectorAll('input[type="range"].range-gradient');
@@ -470,9 +479,11 @@ export default function PopupSaveGradient(){
                         </div>
                         <div className="flex gap-3 mb-4">
                             <div className="flex-1">
-                                <div className="flex items-center justify-between">
-                                    <label htmlFor="colorActive_" className="text-sm font-medium mb-2.5 block">Color</label>
-                                    <button className="">Remove</button>
+                                <div className="flex items-center justify-between mb-2.5">
+                                    <label htmlFor="colorActive_" className="text-sm font-medium block">Color</label>
+                                    {colors.length > 2 && (
+                                    <button onClick={handleRemoveColor} className="text-sm text-blue-500 hover:underline">Remove</button>
+                                    )}
                                 </div>
                                 <div className="relative">
                                     <input id="color_" onChange={handleChangeColor} value={`#${focusColor.color.toUpperCase()}`} placeholder={`#${focusColor.color.toUpperCase()}`} type="text" className="w-full border outline-none border-gray-300 hover:border-gray-400 transition focus:border-blue-500 px-4 py-2.5 rounded-lg"/>

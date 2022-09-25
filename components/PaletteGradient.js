@@ -10,6 +10,7 @@ export default function PaletteGradient({ palette }){
     const user = useSelector(selectUser);
     const dispatch = useDispatch();
     const refMore = useRef(null);
+    const gradient = JSON.parse(palette.palette);
     const handleMenuMore = (menu) => {
         if (menu==='openGradient') {
             window.open(`/gradient-maker/${palette.palette.join('-')}`);
@@ -22,12 +23,12 @@ export default function PaletteGradient({ palette }){
             handlePushNotif({ text: 'URL copied to the clipboard!', className: 'bg-black', icon: 'checklist' })
         }
         if (menu==='copyCSS') {
-            const gradient = {
+            const dataGradient = {
                 rotation: palette.rotation,
                 type: palette.type
             };
-            gradient['color_position'] = palette.palette;
-            dispatch(setDataShowCSSGradient(gradient));
+            dataGradient['color_position'] = gradient;
+            dispatch(setDataShowCSSGradient(dataGradient));
         }
         if (menu==='downloadIMG'){
             const data = {
@@ -105,13 +106,13 @@ export default function PaletteGradient({ palette }){
         </Fragment>
     )
     const getGradientPreview = () => {
-        return `${palette.type}-gradient(${palette.type==='linear' ? palette.rotation+'deg' : 'circle'}, ${palette.palette.map(obj=>[`#${obj.color} ${obj.position}%`]).join(',')}`;
+        return `${palette.type}-gradient(${palette.type==='linear' ? palette.rotation+'deg' : 'circle'}, ${gradient.map(obj=>[`#${obj.color} ${obj.position}%`]).join(',')}`;
     }
     return (
         <div className='flex flex-col gap-1.5'>
             <div className='h-[104px] lg:h-[124px] flex rounded-xl overflow-hidden border border-gray-100 relative parent-gradient'>
                 <div style={{ backgroundImage: getGradientPreview() }} className="layer absolute top-0 left-0 w-full h-full z-10 cursor-pointer transition"></div>
-                {palette.palette.map(obj=>obj.color).map((color,i)=>(
+                {gradient.map(obj=>obj.color).map((color,i)=>(
                 <div onMouseLeave={()=>dispatch(setCopyPaletteIndex(null))} key={i} onClick={()=>{copyColor(color);dispatch(setCopyPaletteIndex(i))}} style={{ backgroundColor: `#${color}` }} className='cursor-pointer transition-all flex-1 hover:basis-20 relative group'>
                     <span className={`absolute opacity-0 group-hover:opacity-100 transition left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 font-semibold uppercase text-[15px] ${lightOrDark(color)==='light' ? 'text-black' : 'text-white'}`}>{copyPaletteIndex===i ? (
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 animate-scale-check" viewBox="0 0 20 20" fill="currentColor">
