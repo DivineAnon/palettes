@@ -478,7 +478,7 @@ export default function PopupSaveGradient(){
                             ))}
                         </div>
                         <div className="flex gap-3 mb-4">
-                            <div className="flex-1">
+                            <div className="flex-1 order-2">
                                 <div className="flex items-center justify-between mb-2.5">
                                     <label htmlFor="colorActive_" className="text-sm font-medium block">Color</label>
                                     {colors.length > 2 && (
@@ -493,7 +493,7 @@ export default function PopupSaveGradient(){
                                     )}
                                 </div>
                             </div>
-                            <div className="flex-1">
+                            <div className="flex-1 order-1">
                                 <label htmlFor="position_" className="text-sm font-medium mb-3 block">Position</label>
                                 <div className="relative">
                                     <input id="position_" onChange={e=>replacePosition(e.target.value.replace('%',''),focusColor.index)} value={`${focusColor.position}%`} type="text" className="w-full border outline-none border-gray-300 hover:border-gray-400 transition focus:border-blue-500 px-4 py-2.5 rounded-lg text-center font-medium"/>

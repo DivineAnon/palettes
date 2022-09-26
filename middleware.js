@@ -9,8 +9,8 @@ export function middleware(req){
     if (req.nextUrl.pathname==='/palettes') {
         return NextResponse.redirect(new URL('/palettes/trending', req.url));
     }else if (req.nextUrl.pathname==='/generate') {
-        const hexSlug = randomColor({ count: 5 }).map(color=>color.replace('#','')).join('-');
-        return NextResponse.redirect(new URL(`/${hexSlug}`, req.url));
+        // const hexSlug = randomColor({ count: 5 }).map(color=>color.replace('#','')).join('-');
+        return NextResponse.redirect(new URL(`/${randomColor({ count: 5 }).map(color=>color.replace('#','')).join('-')}`, req.url));
     }else if (req.nextUrl.pathname==='/color-picker') {
         const color = randomColor().slice(1);
         return NextResponse.redirect(new URL(`/${color}`, req.url));

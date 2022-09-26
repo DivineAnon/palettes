@@ -85,13 +85,16 @@ export const MyPicker = ({ hex, hsl, hsv, onChange, setState, targetClass, width
         }
     }
     useEffect(()=>{
-        isShow.current = true;
         const resizeEvent = () => {
             setResize(window.innerWidth);
         }
         const clickEvent = (e) => {
-            if (!e.target.closest('#pickerArea') && isShow.current) {
-                setState(null);
+            if (isShow.current) {
+                if (!e.target.closest('#pickerArea')) {
+                    setState(null);
+                }
+            }else {
+                isShow.current = true;
             }
         }
         const scrollEvent = () => {

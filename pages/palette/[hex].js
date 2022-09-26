@@ -339,6 +339,7 @@ export async function getServerSideProps(ctx){
             });
             return { props: { hexArray: hex.split('-'), palette: palette.data.palette, simillar: palette.data.simillar } }
         } catch (error) {
+            console.log(error.response.data)
             return { notFound: true }
         }
     }else {
