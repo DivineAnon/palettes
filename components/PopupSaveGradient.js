@@ -28,11 +28,11 @@ export default function PopupSaveGradient(){
     const [showAddTag, setShowAddTag] = useState(false);
     const [loading, setLoading] = useState(false);
     const [showPicker, setShowPicker] = useState(false);
-    const [colors, setColors] = useState(dataShowSaveGradient.gradient.palette);
+    const [colors, setColors] = useState(JSON.parse(dataShowSaveGradient.gradient.palette));
     const [rotation, setRotation] = useState(dataShowSaveGradient.gradient.rotation);
     const [type,setType] = useState(dataShowSaveGradient.gradient.type);
     const [showMoreType, setShowMoreType] = useState(false);
-    const [focusColor, setFocusColor] = useState(dataShowSaveGradient.gradient.palette[0]);
+    const [focusColor, setFocusColor] = useState(JSON.parse(dataShowSaveGradient.gradient.palette)[0]);
     const removeTag = (index) => {
         setDataSave(before=>({ ...before, tags: before.tags.filter((t,i)=>i!==index) }));
     }

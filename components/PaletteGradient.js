@@ -1,4 +1,4 @@
-import { copyColor, handlePushNotif, lightOrDark, saveGradientAsImg } from "../lib";
+import { copyColor, getGradientPreview, handlePushNotif, lightOrDark, saveGradientAsImg } from "../lib";
 import { Fragment, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../slices/userSlice";
@@ -16,11 +16,15 @@ export default function PaletteGradient({ palette }){
             window.open(`/gradient-maker/${palette.palette.join('-')}`);
         }
         if (menu==='openGenerator') {
-            window.open(`/${palette.palette.join('-')}`);
+            const palettes = gradient.map(grad=>grad.color);
+            const positions = gradient.map(grad=>grad.position);
+            window.open(`/gradient-maker/${palettes.join('-')}?position=${positions.join(',')}&type=${data.gradient.type}&rotation=${data.gradient.rotation}`)
         }
         if (menu==='copyURL') {
-            navigator.clipboard.writeText(window.location.origin+`/palette/${palette.palette.join('-')}`);
-            handlePushNotif({ text: 'URL copied to the clipboard!', className: 'bg-black', icon: 'checklist' })
+            const palettes = gradient.map(grad=>grad.color);
+            const positions = gradient.map(grad=>grad.position);
+            navigator.clipboard.writeText(`${window.location.origin}/gradient-maker/${palettes.join('-')}?position=${positions.join(',')}&type=${palette.type}&rotation=${palette.rotation}`);
+            handlePushNotif({ text: 'URL copied to the clipboard!', className: 'bg-black', icon: 'checklist' });
         }
         if (menu==='copyCSS') {
             const dataGradient = {
@@ -33,9 +37,9 @@ export default function PaletteGradient({ palette }){
         if (menu==='downloadIMG'){
             const data = {
                 rotation: 90,
-                colors: palette.palette.map((color,i)=>({ pos: 1*i, color: `#${color}` }))
+                colors: gradient.map((grad)=>({ pos: grad.position/100, color: `#${grad.color}` }))
             }
-            saveGradientAsImg('linear',data,'gradient');
+            saveGradientAsImg(palette.type,data,'gradient');
         }
         if (menu==='fullscreen') {
             dispatch(setDataFullscreenPalette(palette,'gradient'));
@@ -105,13 +109,10 @@ export default function PaletteGradient({ palette }){
             </section>
         </Fragment>
     )
-    const getGradientPreview = () => {
-        return `${palette.type}-gradient(${palette.type==='linear' ? palette.rotation+'deg' : 'circle'}, ${gradient.map(obj=>[`#${obj.color} ${obj.position}%`]).join(',')}`;
-    }
     return (
         <div className='flex flex-col gap-1.5'>
             <div className='h-[104px] lg:h-[124px] flex rounded-xl overflow-hidden border border-gray-100 relative parent-gradient'>
-                <div style={{ backgroundImage: getGradientPreview() }} className="layer absolute top-0 left-0 w-full h-full z-10 cursor-pointer transition"></div>
+                <div style={{ backgroundImage: getGradientPreview(palette) }} className="layer absolute top-0 left-0 w-full h-full z-10 cursor-pointer transition"></div>
                 {gradient.map(obj=>obj.color).map((color,i)=>(
                 <div onMouseLeave={()=>dispatch(setCopyPaletteIndex(null))} key={i} onClick={()=>{copyColor(color);dispatch(setCopyPaletteIndex(i))}} style={{ backgroundColor: `#${color}` }} className='cursor-pointer transition-all flex-1 hover:basis-20 relative group'>
                     <span className={`absolute opacity-0 group-hover:opacity-100 transition left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 font-semibold uppercase text-[15px] ${lightOrDark(color)==='light' ? 'text-black' : 'text-white'}`}>{copyPaletteIndex===i ? (

@@ -1,4 +1,4 @@
-import { copyColor, getGradientPreview, handlePushNotif, lightOrDark } from "../lib";
+import { copyColor, getGradientPreview, handlePushNotif, lightOrDark, saveGradientAsImg } from "../lib";
 import { Fragment, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { handleSaveGradient, setDataFullscreenPalette, setDataMenuMore, setDataShowCSSGradient, setIdDeleteGradient } from "../slices/popupSlice";
@@ -36,8 +36,8 @@ export default function PaletteGradientSaves({ data }){
             window.open(`/gradient-maker/${palettes.join('-')}?position=${positions.join(',')}&type=${data.gradient.type}&rotation=${data.gradient.rotation}`)
         }
         if (menu==='copyURL') {
-            const palettes = data.gradient.palette.map(grad=>grad.color);
-            const positions = data.gradient.palette.map(grad=>grad.position);
+            const palettes = gradient.map(grad=>grad.color);
+            const positions = gradient.map(grad=>grad.position);
             navigator.clipboard.writeText(`${window.location.origin}/gradient-maker/${palettes.join('-')}?position=${positions.join(',')}&type=${data.gradient.type}&rotation=${data.gradient.rotation}`);
             handlePushNotif({ text: 'URL copied to the clipboard!', className: 'bg-black', icon: 'checklist' });
         }
@@ -48,6 +48,13 @@ export default function PaletteGradientSaves({ data }){
             };
             dataGradient['color_position'] = gradient;
             dispatch(setDataShowCSSGradient(dataGradient));
+        }
+        if (menu==='downloadIMG'){
+            const dataImg = {
+                rotation: 90,
+                colors: gradient.map((grad)=>({ pos: grad.position/100, color: `#${grad.color}` }))
+            }
+            saveGradientAsImg(data.gradient.type,dataImg,'gradient');
         }
     }
     const menuMore = ()=> (

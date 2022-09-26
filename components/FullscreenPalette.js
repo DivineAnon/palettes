@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getGradientPreview } from "../lib";
 import { closePopupFullscreenPalette, selectDataFullscreenPalette } from "../slices/popupSlice";
 
 export default function FullscreenPalette(){
@@ -14,9 +15,6 @@ export default function FullscreenPalette(){
         },100)
         return ()=> clearTimeout(timeout);
     }
-    const getGradientPreview = () => {
-        return `${palette.type}-gradient(${palette.type==='linear' ? palette.rotation+'deg' : 'circle'}, ${palette.palette.map(obj=>[`#${obj.color} ${obj.position}%`]).join(',')}`;
-    }
     return (
         <div ref={containerRef} className="flex fixed z-[100] top-0 left-0 w-full h-full animate-translateY">
             <button onClick={handleClose} className="absolute z-10 right-5 top-5 bg-white border p-1.5 rounded-full">
@@ -29,7 +27,7 @@ export default function FullscreenPalette(){
                 <div key={i} style={{ background: `#${color}`}} className="flex-1"></div>
                 ))
             ) : (
-                <div style={{ backgroundImage: getGradientPreview()}} className="flex-1"></div>
+                <div style={{ backgroundImage: getGradientPreview(palette)}} className="flex-1"></div>
             )}
         </div>
     )
