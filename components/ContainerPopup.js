@@ -6,7 +6,7 @@ export default function ContainerPopup({ children, remove }){
         }
     }
     return (
-        <div onClick={removeAll} className="left-0 top-0 fixed exit w-full sm:flex sm:items-center sm:justify-center h-screen bg-black/30 z-[90]">
+        <div onClick={removeAll} className="left-0 top-0 fixed exit w-full sm:flex sm:items-center sm:justify-center h-full bg-black/30 z-[90]">
             {children}
         </div>
     )
