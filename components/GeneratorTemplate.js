@@ -395,7 +395,7 @@ export default function GeneratorTemplate({ colorProps }){
             {!zenMode && (
             <Fragment>
                 <Header/>
-                <div className="top-full -translate-y-full border-t md:border-t-0 md:top-[59px] md:translate-y-0 w-full bg-white z-10 fixed flex md:justify-end lg:justify-between items-center border-b px-4 md:px-6 py-2">
+                <div className="top-full -translate-y-full border-t md:border-t-0 md:top-[59px] md:translate-y-0 w-full bg-white z-20 fixed flex md:justify-end lg:justify-between items-center border-b px-4 md:px-6 py-2">
                     <p className="text-[15px] hidden lg:block text-gray-500 font-medium">Press the spacebar to generate color palettes!</p>
                     <div className="flex justify-between w-full md:w-max">
                         <button onClick={generateColorsByBtn} className="block md:hidden border text-sm px-3 rounded-md py-1.5 font-medium transition hover:border-gray-400">Generate</button>

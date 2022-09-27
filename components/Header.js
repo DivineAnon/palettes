@@ -250,18 +250,27 @@ export default function Header({ isFixed }){
                 </svg>
             </div>
         </div>
-        <div className={`bg-white fixed z-50 top-0 left-0 max-w-[320px] mr-4 p-[30px] overflow-auto h-screen duration-300 transition-all ${menuLeft ? 'translate-x-0' : '-translate-x-full'}`}>
-            <Link href="/">
+        <div className={`bg-white md:hidden fixed z-50 top-0 left-0 max-w-[320px] mr-4 p-[30px] overflow-auto h-screen duration-300 transition-all ${menuLeft ? 'translate-x-0' : '-translate-x-full'}`}>
+            <Link href="/generate">
                 <a className='font-bold text-[#18D39E] text-[22px] block mb-5'>Palette Generator</a>
             </Link>
-            <Link href="/">
-                <a className='font-bold text-[#FF0096] text-[22px] block mb-10'>Explore Palettes</a>
+            <Link href="/palettes">
+                <a className='font-bold text-[#FF0096] text-[22px] block mb-5'>Explore Palettes</a>
+            </Link>
+            <Link href="/contrast-checker">
+                <a className='font-bold text-[#F2BE00] text-[22px] block mb-10'>Contrast Checker</a>
             </Link>
             <h1 className='font-bold text-gray-400 mb-5'>OTHER</h1>
-            <Link href="/">
-                <a className='font-medium block mb-3.5 text-lg'>Create a Gradients</a>
+            <Link href="/gradients">
+                <a className='font-medium block mb-3.5 text-lg'>Explore Gradients</a>
             </Link>
-            <Link href="/">
+            <Link href="/gradient-maker">
+                <a className='font-medium block mb-3.5 text-lg'>Create a Gradient</a>
+            </Link>
+            <Link href="/gradient-palette">
+                <a className='font-medium block mb-3.5 text-lg'>Make a Gradient Palette</a>
+            </Link>
+            <Link href="/color-picker">
                 <a className='font-medium block mb-10 text-lg'>Color Picker</a>
             </Link>
             <h1 className='font-bold text-gray-400 mb-5'>APPS</h1>
