@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setUser } from '../slices/userSlice';
 import { setLoginRes } from '../slices/popupSlice';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { handlePushNotif } from '../lib';
 
 export default function Header({ isFixed }){
@@ -250,7 +250,7 @@ export default function Header({ isFixed }){
                 </svg>
             </div>
         </div>
-        <div className={`bg-white fixed z-50 top-0 left-0 max-w-[320px] mr-4 p-[30px] h-screen duration-300 transition-all ${menuLeft ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className={`bg-white fixed z-50 top-0 left-0 max-w-[320px] mr-4 p-[30px] overflow-auto h-screen duration-300 transition-all ${menuLeft ? 'translate-x-0' : '-translate-x-full'}`}>
             <Link href="/">
                 <a className='font-bold text-[#18D39E] text-[22px] block mb-5'>Palette Generator</a>
             </Link>
@@ -272,8 +272,25 @@ export default function Header({ isFixed }){
                 <a className='font-medium block mb-10 text-lg'>Github Page</a>
             </Link>
             <h1 className='font-bold text-gray-400 mb-5'>ACCOUNT</h1>
-            <button onClick={()=>dispacth(setLoginRes('login'))} className='font-medium block mb-3.5 text-lg'>Sign in</button>
-            <button onClick={()=>dispacth(setLoginRes('register'))} className='font-medium block text-lg'>Sign up</button>
+            {!user ? (
+            <Fragment>
+                <button onClick={()=>dispacth(setLoginRes('login'))} className='font-medium block mb-3.5 text-lg'>Sign in</button>
+                <button onClick={()=>dispacth(setLoginRes('register'))} className='font-medium block text-lg'>Sign up</button>
+            </Fragment>
+            ) : (
+            <Fragment>
+                <Link href={`/user`}>
+                    <a className='font-medium block mb-3.5 text-lg'>Dashboard</a>
+                </Link>
+                <Link href={`/u/${user.username}`}>
+                    <a className='font-medium block mb-3.5 text-lg'>Profile</a>
+                </Link>
+                <Link href={`/account`}>
+                    <a className='font-medium block mb-3.5 text-lg'>Account</a>
+                </Link>
+                <button onClick={handleSignOut} className='font-medium block mb-3.5 text-lg'>Sign out</button>
+            </Fragment>
+            )}
         </div>
         {menuLeft && (
         <div onClick={removeMenuLeft} className="fixed w-screen h-screen bg-black/30 top-0 left-0 z-40"></div>

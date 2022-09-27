@@ -37,3 +37,4 @@ export { default as PaletteColorSaves } from './PaletteColorSaves';
 export { default as ProjectSaves } from './ProjectSaves';
 export { default as CollectionSaves } from './CollectionSaves';
 export { default as DashboardLoading } from './DashboardLoading';
+export { default as PaletteBox } from './PaletteBox';
