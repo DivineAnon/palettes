@@ -9,6 +9,10 @@ const getRandomColor = (count) => {
     return randomColor({ count }).map(color=>color.slice(1)).join('-');
 }
 
+export const config = {
+    runtime: 'experimental-edge',
+  }
+
 export function middleware(req){
     if (req.nextUrl.pathname==='/palettes') {
         return NextResponse.redirect(new URL('/palettes/trending', req.url));
