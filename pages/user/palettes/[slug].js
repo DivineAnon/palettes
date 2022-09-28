@@ -1,18 +1,20 @@
 import axios from "axios";
-import { useLayoutEffect, useRef, Fragment, useEffect } from "react";
+import { useRef, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Footer, Header, Layout, PaletteBox } from "../../../components";
-import { GetToken, handlePushNotif } from "../../../lib";
+import { GetToken, usePushNotif,  } from "../../../lib";
 import { selectDetailDashboardPalette, selectDetailDashboardPaletteData, setDetailDashboardPalette } from "../../../slices/dashboardSlice";
 import { handleSavePalette, setDataExportPalette, setDataFullscreenPalette, setDataMenuMore, setDataPaletteDetail, setIdDeletePalette } from "../../../slices/popupSlice";
 import { selectUser } from "../../../slices/userSlice";
+import { wrapper } from "../../../store";
 
-export default function PaletteEdit({ dataPalette }){
+export default function PaletteEdit(){
     const data = useSelector(selectDetailDashboardPaletteData);
     const palette = useSelector(selectDetailDashboardPalette);
     const user = useSelector(selectUser);
     const dispatch = useDispatch();
     const btnMoreRef = useRef(null);
+    const handlePushNotif = usePushNotif();
     const menuMorePalette = ()=> (
         <Fragment>
             <section className="mb-2">
@@ -90,10 +92,6 @@ export default function PaletteEdit({ dataPalette }){
             dispatch(setDataPaletteDetail(data));
         }
     }
-    useLayoutEffect(()=>{
-        dispatch(setDetailDashboardPalette(dataPalette));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
     return (
         <Layout title={`My new palette - Palettes`}>
             <Header/>
@@ -117,14 +115,14 @@ export default function PaletteEdit({ dataPalette }){
                         </div>
                     </div>
                 </div>
-                <PaletteBox palettes={palette ? palette : dataPalette.palette.palette}/>
+                <PaletteBox palettes={palette}/>
             </div>
             <Footer/>
         </Layout>
     )
 }
 
-export async function getServerSideProps(ctx) {
+export const getServerSideProps = wrapper.getServerSideProps(store => async (ctx) => {
     const { slug } = ctx.query;
     try {
         const palette = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/saves-palettes/get/${slug}`,{
@@ -132,8 +130,8 @@ export async function getServerSideProps(ctx) {
                 Authorization: `bearer ${GetToken(ctx)}`
             }
         })
-        return { props: { dataPalette: palette.data } }
+        store.dispatch(setDetailDashboardPalette(palette.data));
     } catch (error) {
         return { notFound: true }
     }
-}
+})

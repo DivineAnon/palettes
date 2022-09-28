@@ -4,13 +4,14 @@ import { saveAs } from 'file-saver';
 import chroma from "chroma-js";
 import { useDispatch, useSelector } from "react-redux";
 import { selectDataShowCSSGradient, setDataShowCSSGradient } from "../slices/popupSlice";
-import { handlePushNotif } from "../lib";
+import { usePushNotif } from "../lib";
 
 export default function PopupCSSGradient(){
     const dispatch = useDispatch();
     const { color_position, type, rotation } = useSelector(selectDataShowCSSGradient);
     const codePopupRef = useRef(null);
     const textEditor = useRef(null);
+    const handlePushNotif = usePushNotif();
     const removeBox = (time) => {
         codePopupRef.current.classList.remove('sm:animate-fadeIn');
         codePopupRef.current.classList.remove('animate-translateY');

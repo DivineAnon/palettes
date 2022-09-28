@@ -1,6 +1,6 @@
 import { Fragment, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { colorsGroup, copyColor, handlePushNotif, lightOrDark, useIsSm } from "../lib";
+import { colorsGroup, lightOrDark, useIsSm, useNotifColor, usePushNotif } from "../lib";
 import { selectCopyPaletteIndex, setCopyPaletteIndex } from "../slices/globalSlice";
 import { handleAddQuery } from "../slices/palettesSlice";
 import { handleSavePalette, setDataExportPalette, setDataFullscreenPalette, setDataMenuMore, setDataQuickView, setIdDeletePalette } from "../slices/popupSlice";
@@ -12,6 +12,8 @@ export default function PaletteDashboard({ data }){
     const dispatch = useDispatch();
     const menuMoreRef = useRef(null);
     const isSm = useIsSm();
+    const copyColor = useNotifColor();
+    const handlePushNotif = usePushNotif();
     const handleMenuMore = (menu) => {
         if (menu==='openPalette') {
             window.open(`/user/palettes/${data.palette.slug}`);

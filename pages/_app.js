@@ -1,11 +1,10 @@
 import '../styles/globals.css';
 import NProgress from 'nprogress';
 import Router from 'next/router';
-import { Provider } from 'react-redux';
-import { store } from '../store';
-import { fetchUser } from '../slices/userSlice';
-
-store.dispatch(fetchUser())
+import { wrapper } from '../store';
+import { setUser } from '../slices/userSlice';
+import { GetToken } from '../lib';
+import axios from 'axios';
 
 function MyApp({ Component, pageProps }) {
   NProgress.configure({ showSpinner: false });
@@ -15,11 +14,19 @@ function MyApp({ Component, pageProps }) {
   Router.events.on('routeChangeComplete',()=>{
     NProgress.done();
   });
-  return (
-    <Provider store={store}>
-      <Component {...pageProps} />
-    </Provider>
-  )
+  return <Component {...pageProps} />
 }
 
-export default MyApp
+MyApp.getInitialProps = wrapper.getInitialAppProps((store) => async ({ ctx }) => {
+  const token = GetToken(ctx)
+  if (token) {
+    const user = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/users-permissions/user/getMe`,{
+      headers: {
+          Authorization: `bearer ${token}`
+      }
+    });
+    store.dispatch(setUser(user.data));
+  }
+})
+
+export default wrapper.withRedux(MyApp)

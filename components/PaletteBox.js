@@ -1,7 +1,7 @@
 import { GetColorName } from "hex-color-to-color-name";
 import { useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { copyColor, handlePushNotif, hexToCMYK, hexToHSB, hexToHSL, hexToLAB, hexToRgb, lightOrDark } from "../lib";
+import { hexToCMYK, hexToHSB, hexToHSL, hexToLAB, hexToRgb, lightOrDark, useNotifColor, usePushNotif } from "../lib";
 import { selectDataMenuMore, setDataFullscreenPalette, setDataMenuMore, setDataSingleQuickView } from "../slices/popupSlice";
 
 export default function PaletteBox({ palettes }){
@@ -13,6 +13,8 @@ export default function PaletteBox({ palettes }){
     const showMenuMore = useSelector(selectDataMenuMore);
     const [copyHex, setCopyHex] = useState(null);
     const activeColor = useRef(null);
+    const copyColor = useNotifColor();
+    const handlePushNotif = usePushNotif();
     const handleSingleMenu = (menu) => {
         if (menu==='copyURL'){
             navigator.clipboard.writeText(window.location.origin+`/${activeColor.current}`);

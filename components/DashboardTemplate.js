@@ -30,7 +30,7 @@ export default function DashboardTemplate({ children }){
             let colors = randomColor({ count: getRandomRangeNumber(2,4) });
             console.log(colors)
             colors = colors.map((hex,i)=>({ color: hex.slice(1), index: i, position: (100/(colors.length-1))*i }));
-            dispatch(handleSaveGradient(user,{ palette: colors, type: 'linear', rotation: 90 },'save'));
+            dispatch(handleSaveGradient(user,{ palette: JSON.stringify(colors), type: 'linear', rotation: 90 },'save'));
         }
     }
     const menuMore = ()=> (

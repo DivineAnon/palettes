@@ -2,7 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useRef , useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetToken, handlePushNotif } from "../lib";
+import { GetToken, usePushNotif,  } from "../lib";
 import { addDashboardProject, updateDashboardProject } from "../slices/dashboardSlice";
 import { closePopupProject, selectDataPopupProject } from "../slices/popupSlice";
 import { addUserProject, selectUser, updateUserProject } from "../slices/userSlice";
@@ -17,6 +17,7 @@ export default function PopupCreateProject(){
     const elementRef = useRef(null);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState({ name: dataPopupProject.data ? dataPopupProject.data.name : '' });
+    const handlePushNotif = usePushNotif();
     const handleChange = (e) => {
         setData({ [e.target.name]: e.target.value });
     }

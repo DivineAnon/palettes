@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import popupReducer from './slices/popupSlice';
 import userReducer from './slices/userSlice';
 import palettesReducer from './slices/palettesSlice';
@@ -8,9 +8,9 @@ import sidebarReducer from './slices/sidebarSlice';
 import gradientsReducer from './slices/gradientsSlice';
 import generatorReducer from './slices/generatorSlice';
 import globalReducer from './slices/globalSlice';
+import { createWrapper, HYDRATE } from "next-redux-wrapper";
 
-export const store = configureStore({
-    reducer: {
+const combinedReducer = combineReducers({
         user: userReducer,
         popup: popupReducer,
         palettes: palettesReducer,
@@ -20,9 +20,23 @@ export const store = configureStore({
         gradients: gradientsReducer,
         generator: generatorReducer,
         global: globalReducer
-    },
+  });
+
+
+const masterReducer = (state, action) => {
+    if (action.type === HYDRATE) {
+        return action.payload;
+    } else {
+    return combinedReducer(state, action)
+  }
+}
+
+export const store = () => configureStore({
+    reducer: masterReducer,
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({
             serializableCheck: false,
         }),
 })
+
+export const wrapper = createWrapper(store);

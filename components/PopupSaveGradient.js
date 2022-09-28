@@ -3,7 +3,7 @@ import chroma from "chroma-js";
 import { useRouter } from "next/router";
 import { useRef, useState, Fragment, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { dataCreateGradient, GetToken, handlePushNotif } from "../lib";
+import { dataCreateGradient, GetToken, usePushNotif,  } from "../lib";
 import { addDashboardGradient, updateDashboardGradient } from "../slices/dashboardSlice";
 import { updateLikeGradient } from "../slices/gradientsSlice";
 import { closePopupGradient, selectDataPopupGradient, setDataMenuMore } from "../slices/popupSlice";
@@ -21,6 +21,7 @@ export default function PopupSaveGradient(){
     const user = useSelector(selectUser);
     const dispatch = useDispatch();
     const Router = useRouter();
+    const handlePushNotif = usePushNotif();
     const dataShowSaveGradient = useSelector(selectDataPopupGradient);
     const [dataSave, setDataSave] = useState({ name: '', description: '', tags: [], projects: [], collections: [] })
     const [activeMenu, setActiveMenu] = useState('info');
@@ -28,6 +29,7 @@ export default function PopupSaveGradient(){
     const [showAddTag, setShowAddTag] = useState(false);
     const [loading, setLoading] = useState(false);
     const [showPicker, setShowPicker] = useState(false);
+    console.log(dataShowSaveGradient)
     const [colors, setColors] = useState(JSON.parse(dataShowSaveGradient.gradient.palette));
     const [rotation, setRotation] = useState(dataShowSaveGradient.gradient.rotation);
     const [type,setType] = useState(dataShowSaveGradient.gradient.type);

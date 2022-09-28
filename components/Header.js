@@ -5,13 +5,14 @@ import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setUser } from '../slices/userSlice';
 import { setLoginRes } from '../slices/popupSlice';
-import { Fragment, useState } from 'react';
-import { handlePushNotif } from '../lib';
+import { Fragment, useEffect, useState } from 'react';
+import { usePushNotif } from '../lib';
 
 export default function Header({ isFixed }){
     const [menuLeft, setMenuLeft] = useState(false);
     const user = useSelector(selectUser);
     const dispacth = useDispatch();
+    const handlePushNotif = usePushNotif();
     const showMenuLeft = () => {
         setMenuLeft(true);
         document.body.classList.add('overflow-hidden');
@@ -30,6 +31,9 @@ export default function Header({ isFixed }){
             Router.replace('/');
         }
     }
+    useEffect(()=>{
+        Router.events.on('routeChangeStart',removeMenuLeft);
+    },[])
     return (
         <>
         <div className={`bg-white z-30 h-[60px] sticky ${!isFixed && 'md:absolute'} top-0 left-0 w-full flex items-center justify-center md:justify-between border-b px-6`}>

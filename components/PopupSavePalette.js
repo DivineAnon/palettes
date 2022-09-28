@@ -5,7 +5,7 @@ import { useLayoutEffect } from "react";
 import { useEffect } from "react";
 import { useState, useRef, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { dataCreatePalette, GetToken, handlePushNotif, lightOrDark } from "../lib";
+import { dataCreatePalette, GetToken, lightOrDark, usePushNotif } from "../lib";
 import { addDashboardPalette, setDetailDashboardPalette, updateDashboardPalette } from "../slices/dashboardSlice";
 import { updateLikePalette } from "../slices/palettesSlice";
 import { selectSavePalette, setSavePalette } from "../slices/popupSlice";
@@ -21,6 +21,7 @@ export default function PopupSavePalette(){
     const dataPalette = useSelector(selectSavePalette);
     const dispatch = useDispatch();
     const Router = useRouter();
+    const handlePushNotif = usePushNotif();
     const [activeMenu, setActiveMenu] = useState('info');
     const [loading, setLoading] = useState(null);
     const [valueTag, setValueTag] = useState('');

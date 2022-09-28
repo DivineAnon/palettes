@@ -1,12 +1,12 @@
 import axios from "axios";
-import { useLayoutEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch, useSelector } from "react-redux";
 import { DashboardLoading, DashboardSearch, DashboardTemplate, PaletteGradientSaves } from "../../../components";
 import { colorsGroup, GetToken, stylesPalette } from "../../../lib";
 import { fetchMoreGradientsDashboard, selectDashboardGradients, selectDashboardGradientsPage, selectLoadingFetchMoreDashboardGradients, setDashboardGradients } from "../../../slices/dashboardSlice";
+import { wrapper } from "../../../store";
 
-export default function GradientsDashboard({ dataGradients }){
+export default function GradientsDashboard(){
     const dispatch = useDispatch();
     const gradients = useSelector(selectDashboardGradients);
     const gradientsPage = useSelector(selectDashboardGradientsPage);
@@ -49,10 +49,6 @@ export default function GradientsDashboard({ dataGradients }){
             </div>
         </section>
     )
-    useLayoutEffect(()=>{
-        dispatch(setDashboardGradients(dataGradients));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
     return (
         <DashboardTemplate>
             <DashboardSearch title={'Gradients'} filtersMenu={filtersMenu} handleSearch={handleSearch}/>
@@ -83,15 +79,15 @@ export default function GradientsDashboard({ dataGradients }){
     )
 }
 
-export async function getServerSideProps(ctx){
+export const getServerSideProps = wrapper.getServerSideProps(store => async (ctx) => {
     try {
         const dataGradients = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/saves-gradients/feed?page=1`,{
             headers: {
                 Authorization: `bearer ${GetToken(ctx)}`
             }
         })
-        return { props: { dataGradients: dataGradients.data } }
+        store.dispatch(setDashboardGradients(dataGradients.data));
     } catch (error) {
         return { notFound: true }
     }
-}
+})

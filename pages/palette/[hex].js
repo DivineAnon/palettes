@@ -1,21 +1,23 @@
 import axios from "axios";
 import chroma from "chroma-js";
 import Link from "next/link";
-import { Fragment, useRef, useLayoutEffect } from "react";
+import { Fragment, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Footer, Header, Layout, Palette, PaletteBox } from "../../components";
-import { dataCreatePalette, colorsGroup, handlePushNotif } from "../../lib";
+import { dataCreatePalette, colorsGroup, usePushNotif,  } from "../../lib";
 import { handleAddQuery, selectPalettes, setPalettes } from "../../slices/palettesSlice";
 import { handleSavePalette, setDataExportPalette, setDataFullscreenPalette, setDataMenuMore, setDataQuickView } from "../../slices/popupSlice";
 import { selectSinglePalette, setSinglePalette } from "../../slices/singlePaletteSlice";
 import { selectUser } from "../../slices/userSlice";
+import { wrapper } from '../../store';
 
-export default function PaletteView({ hexArray, palette, simillar }){
+export default function PaletteView({ hexArray, palette }){
     const user = useSelector(selectUser);
     const singlePalette = useSelector(selectSinglePalette);
     const simillarPalettes = useSelector(selectPalettes);
     const dispatch = useDispatch();
     const btnMoreRef = useRef(null);
+    const handlePushNotif = usePushNotif();
     const handleMenuMore = (menu) => {
         if (menu==='openPalette') {
             window.open(`/palette/${hexArray.join('-')}`);
@@ -103,10 +105,6 @@ export default function PaletteView({ hexArray, palette, simillar }){
             </section>
         </Fragment>
     )
-    useLayoutEffect(()=>{
-        dispatch(setSinglePalette(palette));
-        dispatch(setPalettes({ data: simillar, meta: { pagination: { page: 1 } } }));
-    },[])
     return (
         <Layout title={"Palette - Palettes"}>
             <Header/>
@@ -162,8 +160,7 @@ export default function PaletteView({ hexArray, palette, simillar }){
     )
 }
 
-
-export async function getServerSideProps(ctx){
+export const getServerSideProps = wrapper.getServerSideProps(store=> async (ctx) => {
     const { hex } = ctx.query;
     const valid = hex.split('-').map(hex=>chroma.valid(hex));
     if (!valid.includes(false)) {
@@ -173,6 +170,8 @@ export async function getServerSideProps(ctx){
                     ...dataCreatePalette(hex)
                 }
             });
+            store.dispatch(setSinglePalette(palette.data.palette));
+            store.dispatch(setPalettes({ data: palette.data.simillar, meta: { pagination: { page: 1 } } }));
             return { props: { hexArray: hex.split('-'), palette: palette.data.palette, simillar: palette.data.simillar } }
         } catch (error) {
             console.log(error.response.data)
@@ -181,4 +180,4 @@ export async function getServerSideProps(ctx){
     }else {
         return { notFound: true }
     }
-}
+})

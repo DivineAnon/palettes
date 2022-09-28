@@ -3,17 +3,19 @@ import { Footer, Header, Layout, Palette, ColorPickerRelative } from "../../comp
 import chroma from "chroma-js";
 import Link from 'next/link';
 import axios from "axios";
-import { copyColor, dataCreatePalette, lightOrDark } from "../../lib";
+import { dataCreatePalette, lightOrDark, useNotifColor } from "../../lib";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPalettes, setPalettes } from "../../slices/palettesSlice";
 import { handleSavePalette, setDataExportPalette, setDataMenuMore } from "../../slices/popupSlice";
 import { selectUser } from "../../slices/userSlice";
 import { selectCopyPaletteIndex, setCopyPaletteIndex } from "../../slices/globalSlice";
+import { wrapper } from '../../store'
 
-export default function GradientPalette({ colStartEnd, gradients, examples }){
+export default function GradientPalette({ colStartEnd, gradients }){
     const dispatch = useDispatch();
     const palettes = useSelector(selectPalettes);
     const user = useSelector(selectUser);
+    const copyColor = useNotifColor();
     const copyPaletteIndex = useSelector(selectCopyPaletteIndex);
     const [colorGradient, setColorGradient] = useState(gradients);
     const [startColor, setStartColor] = useState(colStartEnd[0]);
@@ -112,10 +114,6 @@ export default function GradientPalette({ colStartEnd, gradients, examples }){
         setColorGradient(chroma.scale([startColor,endColor]).colors(lengthColor).map(color=>color.replace('#','')));
         window.history.pushState('','',`/gradient-palette/${[startColor,endColor].join('-')}?number=${lengthColor}`);
     },[startColor,endColor,lengthColor])
-    useLayoutEffect(()=>{
-        dispatch(setPalettes({ data: examples, meta: { pagination: { page: 1 } } }));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
     return (
         <Layout title={'Create a Gradient palette - Palettes'}>
             <Header/>
@@ -210,7 +208,7 @@ export default function GradientPalette({ colStartEnd, gradients, examples }){
     )
 }
 
-export async function getServerSideProps(ctx){
+export const getServerSideProps = wrapper.getServerSideProps(store => async (ctx) => {
     const { hex, number } = ctx.query;
     let colStartEnd = hex.split('-');
     if (colStartEnd.length>2) {
@@ -226,8 +224,9 @@ export async function getServerSideProps(ctx){
                 }
             })
         }
+        store.dispatch(setPalettes({ data: examplePalettes.data, meta: { pagination: { page: 1 } } }));
         return { props: { colStartEnd, gradients, examples: examplePalettes.data } }
     }else {
         return { notFound: true }
     }
-}
+})

@@ -1,8 +1,8 @@
-import { AvatarProfileEdit, Footer, Header, Layout, NotifRelative, Spinner } from "../../components";
+import { AvatarProfileEdit, Footer, Header, Layout, Spinner } from "../../components";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useState } from "react";
-import { Authorization, ValidasiUsername, GetToken, ValidasiEmail, SkillsList, ValidasiContact, handlePushNotif } from "../../lib";
+import { Authorization, ValidasiUsername, GetToken, ValidasiEmail, SkillsList, ValidasiContact, usePushNotif,  } from "../../lib";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, setUser } from "../../slices/userSlice";
@@ -14,6 +14,7 @@ export default function Account({ dataUser }){
     const avatarDelID = useSelector(selectAvatarDelId);
     const user = useSelector(selectUser);
     const dispatch = useDispatch();
+    const handlePushNotif = usePushNotif();
     const [showCurrentPW, setShowCurrentPW] = useState(false);
     const [showNewPW, setShowNewPW] = useState(false);
     const [showAccountPW, setShowAccountPW] = useState(false);

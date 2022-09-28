@@ -1,4 +1,4 @@
-import { copyColor, getGradientPreview, handlePushNotif, lightOrDark, saveGradientAsImg } from "../lib";
+import { getGradientPreview, lightOrDark, saveGradientAsImg, useNotifColor, usePushNotif } from "../lib";
 import { Fragment, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../slices/userSlice";
@@ -11,6 +11,8 @@ export default function PaletteGradient({ palette }){
     const dispatch = useDispatch();
     const refMore = useRef(null);
     const gradient = JSON.parse(palette.palette);
+    const copyColor = useNotifColor();
+    const handlePushNotif = usePushNotif();
     const handleMenuMore = (menu) => {
         if (menu==='openGradient') {
             window.open(`/gradient-maker/${palette.palette.join('-')}`);

@@ -1,4 +1,4 @@
-import { colorsGroup, copyColor, handlePushNotif, lightOrDark, useIsSm } from "../lib";
+import { colorsGroup, lightOrDark, useIsSm, useNotifColor, usePushNotif } from "../lib";
 import { Fragment, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../slices/userSlice";
@@ -12,6 +12,8 @@ export default function Palette({ data }){
     const dispatch = useDispatch();
     const refMore = useRef(null);
     const isSm = useIsSm();
+    const copyColor = useNotifColor();
+    const handlePushNotif = usePushNotif();
     const handleMenuMore = (menu) => {
         if (menu==='openPalette') {
             window.open(`/palette/${data.palette.join('-')}`);

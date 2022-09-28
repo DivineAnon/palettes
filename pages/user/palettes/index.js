@@ -1,12 +1,12 @@
 import axios from "axios";
-import { useLayoutEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch, useSelector } from "react-redux";
 import { DashboardLoading, DashboardSearch, DashboardTemplate, PaletteDashboard } from "../../../components";
 import { colorsGroup, GetToken, stylesPalette } from "../../../lib";
 import { fetchMorePalettesDashboard, selectDashboardPalettes, selectDashboardPalettesPage, selectLoadingFetchMoreDashboardPalettes, setDashboardPalettes } from "../../../slices/dashboardSlice";
+import { wrapper } from '../../../store';
 
-export default function PalettesDashboard({ dataPalettes }){
+export default function PalettesDashboard(){
     const palettes = useSelector(selectDashboardPalettes);
     const palettePage = useSelector(selectDashboardPalettesPage);
     const dispatch = useDispatch();
@@ -49,10 +49,6 @@ export default function PalettesDashboard({ dataPalettes }){
     const fetchPalettes = async () => {
         dispatch(fetchMorePalettesDashboard(parseInt(palettePage)+1));
     }
-    useLayoutEffect(()=>{
-        dispatch(setDashboardPalettes(dataPalettes));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
     return (
         <DashboardTemplate>
             <DashboardSearch title={'Palette'} filtersMenu={filtersMenu} handleSearch={handleSearch}/>
@@ -83,15 +79,15 @@ export default function PalettesDashboard({ dataPalettes }){
     )
 }
 
-export async function getServerSideProps(ctx){
+export const getServerSideProps = wrapper.getServerSideProps(store => async (ctx) => {
     try {
         const dataPalettes = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/saves-palettes/feed?page=1`,{
             headers: {
                 Authorization: `bearer ${GetToken(ctx)}`
             }
         })
-        return { props: { dataPalettes: dataPalettes.data } }
+        store.dispatch(setDashboardPalettes(dataPalettes.data));
     } catch (error) {
         return { notFound: true }
     }
-}
+})

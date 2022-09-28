@@ -8,10 +8,11 @@ import chroma from 'chroma-js';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleAddQuery, selectPalettes, selectPalettesPage, selectQueryList, setPalettes, setQueryList } from '../../slices/palettesSlice';
 import { selectShowSidebar, setShowSidebar } from '../../slices/globalSlice';
+import { wrapper } from '../../store';
 
 const avaliableSort = ['Trending','Latest','Popular'];
 
-export default function Trending({ dataPalettes, dataQuery }){
+export default function Trending(){
     const queryList = useSelector(selectQueryList);
     const isMd = useIsMd();
     const palettes = useSelector(selectPalettes);
@@ -115,11 +116,6 @@ export default function Trending({ dataPalettes, dataQuery }){
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[searchBox?.current?.getBoundingClientRect().height])
-    useLayoutEffect(()=>{
-        dispatch(setPalettes(dataPalettes));
-        dispatch(setQueryList(dataQuery));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
     return (
         <Layout title={getTitleFeed(queryList,Router.query.query,isMounted)}>
             <Header isFixed={true}/>
@@ -211,7 +207,7 @@ export default function Trending({ dataPalettes, dataQuery }){
                 >
                     <div className={`grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-x-8 gap-y-3 md:gap-y-5 px-6 md:px-9 lg:px-10 ${queryList.query.length > 0 && 'pt-6 md:pt-0'}`}>
                         {palettes.data.map((palette,i)=>(
-                        <Palette key={palette.id} index={i} data={palette}/>
+                        <Palette key={i} index={i} data={palette}/>
                         ))}
                     </div>
                 </InfiniteScroll>
@@ -234,7 +230,7 @@ export default function Trending({ dataPalettes, dataQuery }){
     )
 }
 
-export async function getServerSideProps(ctx){
+export const getServerSideProps = wrapper.getServerSideProps(store => async (ctx) => {
     const { query } = ctx.query;
     if (query.length>2) {
         return { notFound: true }
@@ -276,5 +272,6 @@ export async function getServerSideProps(ctx){
         return query;
     }
     const palettes = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/palettes/feed?${getFetchQuery(queryList)}`)
-    return { props: { dataPalettes: palettes.data, dataQuery: getQueryList(queryList) } }
-}
+    store.dispatch(setPalettes(palettes.data));
+    store.dispatch(setQueryList(getQueryList(queryList)));
+})

@@ -2,7 +2,7 @@ import { GetColorName } from "hex-color-to-color-name";
 import { useRef } from "react";
 import ContainerPopup from "./ContainerPopup";
 import { saveAs } from 'file-saver';
-import { handlePushNotif, hexToRgb } from "../lib";
+import { hexToRgb, usePushNotif } from "../lib";
 import { useDispatch, useSelector } from "react-redux";
 import { closeCodePopup, selectDataCodePopup, setDataExportPalette } from "../slices/popupSlice";
 
@@ -11,6 +11,7 @@ export default function CodePopup(){
     const dispatch = useDispatch();
     const { view, palettes } = useSelector(selectDataCodePopup);
     const textEditor = useRef(null);
+    const handlePushNotif = usePushNotif();
     const removeBox = (time) => {
         codePopupRef.current.classList.remove('sm:animate-fadeIn');
         codePopupRef.current.classList.remove('animate-translateY');

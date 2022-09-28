@@ -4,8 +4,8 @@ import { GetToken } from "../lib";
 
 const initialState = null;
 
-export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
-    const token = GetToken();
+export const fetchUser = createAsyncThunk('user/fetchUser', async (ctx) => {
+    const token = GetToken(ctx);
     if (token) {
         try {
             const user = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/users-permissions/user/getMe`,{

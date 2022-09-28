@@ -3,7 +3,7 @@ import chroma from "chroma-js";
 import { useRouter } from "next/router";
 import { useRef, useState, Fragment, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetToken, handlePushNotif } from "../lib";
+import { GetToken, usePushNotif,  } from "../lib";
 import { addDashboardColor, updateDashboardColor } from "../slices/dashboardSlice";
 import { selectSaveColor, setSaveColor } from "../slices/popupSlice";
 import { addUserCollection, addUserProject, selectUser } from "../slices/userSlice";
@@ -24,6 +24,7 @@ export default function PopupSaveColor(){
     const [activeMenu, setActiveMenu] = useState('info');
     const [showPicker, setShowPicker] = useState(false);
     const [previewColor, setPreviewColor] = useState(`#${dataSaveColor.color}`);
+    const handlePushNotif = usePushNotif();
     const checkAddProjects = (project) => {
         if (dataSave.projects.map(p=>p.id).includes(project.id)) {
             setDataSave(before=>({ ...before, projects: before.projects.filter(p=>p.id!==project.id) }));

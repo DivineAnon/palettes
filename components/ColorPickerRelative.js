@@ -5,6 +5,7 @@ import {
   Hue,
   EditableInput,
 } from "react-color/lib/components/common";
+import { useIsMd } from "../lib";
 
 export const MyPicker = ({ hex, hsl, hsv, onChange, setState, targetClass, width }) => {
     const isShow = useRef(false);
@@ -12,6 +13,7 @@ export const MyPicker = ({ hex, hsl, hsv, onChange, setState, targetClass, width
     const arrow = useRef(null);
     const [resize, setResize] = useState(0);
     const [scroll, setScroll] = useState(0);
+    const isMd = useIsMd();
     const styles = {
         input: {
             height: 34,
@@ -88,28 +90,39 @@ export const MyPicker = ({ hex, hsl, hsv, onChange, setState, targetClass, width
         const resizeEvent = () => {
             setResize(window.innerWidth);
         }
-        const clickEvent = (e) => {
-            if (isShow.current) {
-                if (!e.target.closest('#pickerArea')) {
-                    setState(null);
-                }
-            }else {
-                isShow.current = true;
-            }
-        }
         const scrollEvent = () => {
             setScroll(window.scrollY);
         }
-        window.addEventListener('click',clickEvent);
         window.addEventListener('resize',resizeEvent);
         window.addEventListener('scroll',scrollEvent);
         return ()=> { 
-            window.removeEventListener('click',clickEvent);
             window.removeEventListener('resize',resizeEvent);
             window.removeEventListener('scroll',scrollEvent);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
+    useEffect(()=>{
+        if (isMd) {
+            document.body.classList.add('overflow-hidden');
+        }
+        const clickEvent = (e) => {
+            if (isShow.current) {
+                if (!e.target.closest('#pickerArea')) {
+                    setState(null);
+                    if (isMd) {
+                        document.body.classList.remove('overflow-hidden');
+                    }
+                }
+            }else {
+                isShow.current = true;
+            }
+        }
+        window.addEventListener('click',clickEvent);
+        return () => {
+            window.removeEventListener('click',clickEvent);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[isMd])
     useLayoutEffect(()=>{
         setPosition();
         // eslint-disable-next-line react-hooks/exhaustive-deps

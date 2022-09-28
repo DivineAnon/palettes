@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { useRef } from "react";
-import { colorsGroup, handlePushNotif } from "../lib";
+import { colorsGroup, usePushNotif,  } from "../lib";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../slices/userSlice";
 import { handleSavePalette, selectDataMenuMore, setDataExportPalette, setDataFullscreenPalette, setDataMenuMore, setDataQuickView, setIdDeletePalette } from "../slices/popupSlice";
@@ -11,6 +11,7 @@ export default function PaletteSidebar({ data, saves }){
     const user = useSelector(selectUser);
     const showMenuMore = useSelector(selectDataMenuMore);
     const refMore = useRef(null);
+    const handlePushNotif = usePushNotif();
     const handleMenuMore = (menu) => {
         if (menu==='openPalette') {
             window.open(`/palette/${saves ? data.palette.palette.join('-') : data.palette.join('-')}`);

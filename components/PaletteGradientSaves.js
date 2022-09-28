@@ -1,4 +1,4 @@
-import { copyColor, getGradientPreview, handlePushNotif, lightOrDark, saveGradientAsImg } from "../lib";
+import { getGradientPreview, lightOrDark, saveGradientAsImg, useNotifColor, usePushNotif } from "../lib";
 import { Fragment, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { handleSaveGradient, setDataFullscreenPalette, setDataMenuMore, setDataShowCSSGradient, setIdDeleteGradient } from "../slices/popupSlice";
@@ -11,6 +11,8 @@ export default function PaletteGradientSaves({ data }){
     const dispatch = useDispatch();
     const refMore = useRef(null);
     const gradient = JSON.parse(data.gradient.palette);
+    const copyColor = useNotifColor();
+    const handlePushNotif = usePushNotif();
     const handleMenuMore = (menu) => {
         if (menu==='duplicate') {
             dispatch(handleSaveGradient(user,data.gradient,'duplicate',data));

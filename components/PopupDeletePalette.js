@@ -2,7 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetToken } from "../lib";
+import { GetToken, usePushNotif } from "../lib";
 import { deleteDashboardPalette } from "../slices/dashboardSlice";
 import { selectIdDeletePalette, setDeletePalette } from "../slices/popupSlice";
 import { deletePaletteLibrary } from "../slices/sidebarSlice";
@@ -15,6 +15,7 @@ export default function PopupDeletePalette(){
     const Router = useRouter();
     const [loading, setLoading] = useState(false);
     const elementRef = useRef(null);
+    const handlePushNotif = usePushNotif();
     const handleDelete = async () => {
         setLoading(true);
         const palette = await axios.delete(`${process.env.NEXT_PUBLIC_API}/api/saves-palettes/delete/${deletePaletteId}`,{

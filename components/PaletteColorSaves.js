@@ -1,4 +1,4 @@
-import { copyColor, handlePushNotif, lightOrDark } from "../lib";
+import { lightOrDark, useNotifColor, usePushNotif } from "../lib";
 import { Fragment, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../slices/userSlice";
@@ -10,6 +10,8 @@ export default function PaletteColorSaves({ data }){
     const refMore = useRef(null);
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
+    const copyColor = useNotifColor();
+    const handlePushNotif = usePushNotif();
     const handleMenuMore = (menu) => {
         if (menu==='openColor') {
             window.open(`/user/colors/${data.color}`);

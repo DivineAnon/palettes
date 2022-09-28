@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import ContainerPopup from "./ContainerPopup";
 import { GetColorName } from "hex-color-to-color-name";
-import { lightOrDark, hexToRgb, hexToHSL, hexToCMYK, hexToHSB, hexToLAB, handlePushNotif } from "../lib";
+import { lightOrDark, hexToRgb, hexToHSL, hexToCMYK, hexToHSB, hexToLAB, usePushNotif,  } from "../lib";
 import { useDispatch, useSelector } from "react-redux";
 import { closePopupSingleQuickView, selectDataMenuMore, selectDataSingleQuickView, setDataExportPaletteAsImg, setDataFullscreenPalette, setDataMenuMore } from "../slices/popupSlice";
 
@@ -12,6 +12,7 @@ export default function SingleQuickView(){
     const showMenuMore = useSelector(selectDataMenuMore);
     const [copy, setCopy] = useState([]);
     const btnMoreRef = useRef(null);
+    const handlePushNotif = usePushNotif();
     const removeBox = (time) => {
         quickViewRef.current.classList.remove('sm:animate-fadeIn');
         quickViewRef.current.classList.remove('animate-translateY');

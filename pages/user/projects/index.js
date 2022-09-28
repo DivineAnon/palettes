@@ -1,12 +1,12 @@
 import axios from "axios";
-import { useLayoutEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch, useSelector } from "react-redux";
 import { DashboardLoading, DashboardSearch, DashboardTemplate, ProjectSaves } from "../../../components";
-import { Authorization, colorsGroup, GetToken, stylesPalette } from "../../../lib";
+import { colorsGroup, GetToken, stylesPalette } from "../../../lib";
 import { fetchMoreProjectsDashboard, selectDashboardProjects, selectDashboardProjectsPage, selectLoadingFetchMoreDashboardProjects, setDashboardProjects } from "../../../slices/dashboardSlice";
+import { wrapper } from '../../../store';
 
-export default function Projects({ dataProjects }){
+export default function Projects(){
     const dispatch = useDispatch();
     const projects = useSelector(selectDashboardProjects);
     const projectsPage = useSelector(selectDashboardProjectsPage);
@@ -49,10 +49,6 @@ export default function Projects({ dataProjects }){
     const fetchProjects = () => {
         dispatch(fetchMoreProjectsDashboard(parseInt(projectsPage)+1));
     }
-    useLayoutEffect(()=>{
-        dispatch(setDashboardProjects(dataProjects));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
     return (
         <DashboardTemplate>
             <DashboardSearch title={'Projects'} handleSearch={handleSearch} filtersMenu={filtersMenu}/>
@@ -83,15 +79,15 @@ export default function Projects({ dataProjects }){
     )
 }
 
-export async function getServerSideProps(ctx){
+export const getServerSideProps = wrapper.getServerSideProps(store => async (ctx) => {
     try {
         const dataProjects = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/projects/feed?page=1`,{
             headers: {
                 Authorization: `bearer ${GetToken(ctx)}`
             }
         })
-        return { props: { dataProjects: dataProjects.data } }
+        store.dispatch(setDashboardProjects(dataProjects.data));
     } catch (error) {
         return { notFound: true }
     }
-}
+})

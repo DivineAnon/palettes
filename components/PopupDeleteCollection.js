@@ -2,7 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetToken, handlePushNotif } from "../lib";
+import { GetToken, usePushNotif,  } from "../lib";
 import { deleteDashboardCollection } from "../slices/dashboardSlice";
 import { selectDataDeleteCollection, setDataDeleteCollection } from "../slices/popupSlice";
 import { deleteUserCollection } from "../slices/userSlice";
@@ -15,6 +15,7 @@ export default function PopupDeleteCollection(){
     const dataDeleteCollection = useSelector(selectDataDeleteCollection);
     const [loading, setLoading] = useState(false);
     const elementRef = useRef(null);
+    const handlePushNotif = usePushNotif();
     const handleDelete = async () => {
         setLoading(true);
         const collection = await axios.delete(`${process.env.NEXT_PUBLIC_API}/api/collections/${dataDeleteCollection.id}`,{

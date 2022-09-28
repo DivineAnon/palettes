@@ -2,7 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetToken } from "../lib";
+import { GetToken, usePushNotif } from "../lib";
 import { deleteDashboardGradient } from "../slices/dashboardSlice";
 import { selectIdDeleteGradient, setDataDeleteGradient } from "../slices/popupSlice";
 import ContainerPopup from "./ContainerPopup";
@@ -14,6 +14,7 @@ export default function PopupDeleteGradient(){
     const Router = useRouter();
     const [loading, setLoading] = useState(false);
     const elementRef = useRef(null);
+    const handlePushNotif = usePushNotif();
     const handleDelete = async () => {
         setLoading(true);
         const color = await axios.delete(`${process.env.NEXT_PUBLIC_API}/api/saves-gradients/delete/${deleteGradientId}`,{

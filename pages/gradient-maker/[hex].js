@@ -3,7 +3,7 @@ import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 import chroma from "chroma-js";
 import randomColor from "randomcolor";
 import axios from "axios";
-import { dataCreateGradient, getRandomRangeNumber, handlePushNotif, saveGradientAsImg } from "../../lib";
+import { dataCreateGradient, getRandomRangeNumber, saveGradientAsImg, usePushNotif } from "../../lib";
 import { setDataMenuMore, setDataShowCSSGradient } from "../../slices/popupSlice";
 import { useDispatch } from "react-redux";
 
@@ -19,6 +19,7 @@ export default function GradientMaker({ colorProps, typeParam, rotationParam }){
     const [showMoreType, setShowMoreType] = useState(false);
     const [fullscreenGradient, setfullscreenGradient] = useState(false);
     const [showPicker, setShowPicker] = useState(false);
+    const handlePushNotif = usePushNotif();
     const handleFocus = (i) => {
         setFocusColor(colors[i]);
     }

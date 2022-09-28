@@ -4,7 +4,7 @@ import { SortableContainer ,SortableElement, SortableHandle } from "react-sortab
 import { arrayMoveImmutable } from "array-move";
 import randomColor from "randomcolor";
 import chroma from "chroma-js";
-import { copyColor, hexToCMYK, hexToHSB, hexToHSL, hexToLAB, hexToRgb, lightOrDark, useIsMd } from "../lib";
+import { hexToCMYK, hexToHSB, hexToHSL, hexToLAB, hexToRgb, lightOrDark, useIsMd, useNotifColor } from "../lib";
 import blinder from 'color-blind';
 import { handleSaveColor, setDataExportPalette, setDataMenuMore, setDataPopupLuminance, setDataPopupViewGradient, setDataQuickView, setDataShowGenerateMethod, setDataShowSettingPalette } from "../slices/popupSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,6 +37,7 @@ export default function GeneratorTemplate({ colorProps }){
     const paletteRef = useRef(null);
     const btnMoreRef = useRef(null);
     const [showShades, setShowShades] = useState(null);
+    const copyColor = useNotifColor();
     function getSecondaryInfo(color){
         if (secondaryInfo==='RGB') {
             let result = hexToRgb(color).join(', ');

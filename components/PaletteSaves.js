@@ -1,6 +1,6 @@
 import { Fragment, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { colorsGroup, copyColor, handlePushNotif, lightOrDark } from "../lib";
+import { colorsGroup, lightOrDark, useNotifColor, usePushNotif } from "../lib";
 import { selectCopyPaletteIndex, setCopyPaletteIndex } from "../slices/globalSlice";
 import { handleAddQuery } from "../slices/palettesSlice";
 import { handleSavePalette, setDataExportPalette, setDataFullscreenPalette, setDataMenuMore, setDataQuickView } from "../slices/popupSlice";
@@ -11,6 +11,8 @@ export default function PaletteSaves({ data }){
     const user = useSelector(selectUser);
     const dispatch = useDispatch();
     const menuMoreRef = useRef(null);
+    const copyColor = useNotifColor();
+    const handlePushNotif = usePushNotif();
     const handleMenuMore = (menu) => {
         if (menu==='openPalette') {
             window.open(`/palette/${data.palette.palette.join('-')}`);

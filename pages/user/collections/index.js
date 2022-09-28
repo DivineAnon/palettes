@@ -1,12 +1,12 @@
 import axios from "axios";
-import { useLayoutEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch, useSelector } from "react-redux";
 import { CollectionSaves, DashboardLoading, DashboardSearch, DashboardTemplate } from "../../../components";
 import { colorsGroup, GetToken, stylesPalette } from "../../../lib";
 import { fetchMoreCollectionsDashboard, selectDashboardCollections, selectDashboardCollectionsPage, selectLoadingFetchMoreDashboardCollections, setDashboardCollections } from "../../../slices/dashboardSlice";
+import { wrapper } from "../../../store";
 
-export default function Collections({ dataCollections }){
+export default function Collections(){
     const dispatch = useDispatch();
     const collections = useSelector(selectDashboardCollections);
     const collectionsPage = useSelector(selectDashboardCollectionsPage);
@@ -49,10 +49,6 @@ export default function Collections({ dataCollections }){
     const fetchCollections = () => {
         dispatch(fetchMoreCollectionsDashboard(parseInt(collectionsPage)+1));
     }
-    useLayoutEffect(()=>{
-        dispatch(setDashboardCollections(dataCollections));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
     return (
         <DashboardTemplate>
             <DashboardSearch title={'Collections'} filtersMenu={filtersMenu} handleSearch={handleSearch}/>
@@ -83,15 +79,15 @@ export default function Collections({ dataCollections }){
     )
 }
 
-export async function getServerSideProps(ctx){
+export const getServerSideProps = wrapper.getServerSideProps(store => async (ctx) => {
     try {
         const dataCollections = await axios.post(`${process.env.NEXT_PUBLIC_API}/api/collections/feed?page=1`,null,{
             headers: {
                 Authorization: `bearer ${GetToken(ctx)}`
             }
         })
-        return { props: { dataCollections: dataCollections.data } }
+        store.dispatch(setDashboardCollections(dataCollections.data));
     } catch (error) {
         return { notFound: true }
     }
-}
+})

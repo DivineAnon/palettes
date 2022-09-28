@@ -2,7 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useRef , useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetToken, handlePushNotif } from "../lib";
+import { GetToken, usePushNotif,  } from "../lib";
 import { addDashboardCollection, updateDashboardCollection } from "../slices/dashboardSlice";
 import { closePopupCollection, selectDataPopupCollection } from "../slices/popupSlice";
 import { addUserCollection, selectUser, updateUserCollection } from "../slices/userSlice";
@@ -17,6 +17,7 @@ export default function PopupCreateCollection(){
     const Router = useRouter();
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState({ name: dataPopupCollection.data ? dataPopupCollection.data.name : '' });
+    const handlePushNotif = usePushNotif();
     const handleChange = (e) => {
         setData({ [e.target.name]: e.target.value });
     }

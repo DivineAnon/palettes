@@ -4,7 +4,7 @@ import { Header, Layout, Footer, ColorPickerRelative, Palette } from "../compone
 import chroma from "chroma-js";
 import { Harmonizer } from "color-harmony";
 import blinder from "color-blind";
-import { lightOrDark, hexToLAB, hexToRgb, hexToCMYK, hexToHSB, hexToHSL, checkContrast, copyColor } from "../lib";
+import { lightOrDark, hexToLAB, hexToRgb, hexToCMYK, hexToHSB, hexToHSL, checkContrast, useNotifColor } from "../lib";
 import Link from "next/link";
 import { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +13,7 @@ import { setDataFullscreenPalette } from "../slices/popupSlice";
 import { selectCopyPaletteIndex, setCopyPaletteIndex } from "../slices/globalSlice";
 
 export default function SingleColor({ colorProps, exampleColor }){
+    const copyColor = useNotifColor();
     const dispatch = useDispatch();
     const examplePalettes = useSelector(selectPalettes);
     const [color, setColor] = useState(colorProps[0]);

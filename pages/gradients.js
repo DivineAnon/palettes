@@ -1,17 +1,12 @@
 import { Footer, Header, Layout, PaletteGradient } from "../components";
 import Link from 'next/link';
 import axios from "axios";
-import { useLayoutEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectDataGradients, setGradients } from "../slices/gradientsSlice";
+import { wrapper } from "../store";
 
-export default function Gradients({ dataGradients }){
-    const dispatch = useDispatch();
+export default function Gradients(){
     const gradientList = useSelector(selectDataGradients);
-    useLayoutEffect(()=>{
-        dispatch(setGradients(dataGradients));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
     return (
         <Layout title={'Browse Gradients - Palettes'}>
             <Header/>
@@ -30,8 +25,7 @@ export default function Gradients({ dataGradients }){
 }
 
 
-
-export async function getServerSideProps(ctx){
+export const getServerSideProps = wrapper.getServerSideProps(store => async () => {
     const dataGradients = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/gradients/feed?page=1`);
-    return { props: { dataGradients: dataGradients.data } }
-}
+    store.dispatch(setGradients(dataGradients.data));
+})

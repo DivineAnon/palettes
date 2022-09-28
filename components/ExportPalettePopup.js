@@ -1,12 +1,13 @@
 import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { handlePushNotif } from "../lib";
+import { usePushNotif } from "../lib";
 import { closePopupExportPalette, selectDataExportPalette, setDataCodePopup, setDataExportPaletteAsImg } from "../slices/popupSlice";
 import ContainerPopup from "./ContainerPopup";
 
 export default function ExportPalettePopup(){
     const exportRef = useRef(null);
     const dispatch = useDispatch();
+    const handlePushNotif = usePushNotif();
     const { palettes } = useSelector(selectDataExportPalette);
     const removeBox = (time) => {
         exportRef.current.classList.remove('sm:animate-fadeIn');

@@ -3,7 +3,7 @@ import ContainerPopup from "./ContainerPopup";
 import axios from "axios";
 import Spinner from "./Spinner";
 import nookies from 'nookies';
-import { Authorization, generateString, handlePushNotif } from "../lib";
+import { Authorization, generateString, usePushNotif, } from "../lib";
 import { useDispatch } from "react-redux";
 import { setUser } from "../slices/userSlice";
 import { closeLoginRes, setLoginResView } from "../slices/popupSlice";
@@ -16,6 +16,7 @@ export default function RegisterPopup(){
     const [loading, setLoading] = useState(false);
     const refRegister = useRef(null);
     const [invalid, setInvalid] = useState(['']);
+    const handlePushNotif = usePushNotif();
     const removeBox = (time) => {
         refRegister.current.classList.remove('sm:animate-fadeIn');
         refRegister.current.classList.remove('animate-translateY');

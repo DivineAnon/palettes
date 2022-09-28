@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useRef, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetToken, handlePushNotif } from "../lib";
+import { GetToken, usePushNotif,  } from "../lib";
 import { resetAvatarDelId, selectAvatarDelId } from "../slices/globalSlice";
 import { setDataShowUploadImage } from "../slices/popupSlice";
 import { selectUser, updateAvatar } from "../slices/userSlice";
@@ -17,6 +17,7 @@ export default function PopupUploadImg(){
     const user = useSelector(selectUser);
     const avatarDelID = useSelector(selectAvatarDelId);
     const inputRef = useRef(null);
+    const handlePushNotif = usePushNotif();
     const removeBox = (time) => {
         uploadImgRef.current.classList.remove('sm:animate-fadeIn');
         uploadImgRef.current.classList.remove('animate-translateY');

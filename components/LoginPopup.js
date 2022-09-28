@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import ContainerPopup from "./ContainerPopup";
 import nookies from 'nookies';
 import Spinner from "./Spinner";
-import { Authorization, handlePushNotif } from "../lib";
+import { Authorization, usePushNotif } from "../lib";
 import { useDispatch } from "react-redux";
 import { setUser } from "../slices/userSlice";
 import { closeLoginRes, setLoginResView } from "../slices/popupSlice";
@@ -14,6 +14,7 @@ export default function LoginPopup(){
     const refLogin = useRef(null);
     const [dataLogin, setDataLogin] = useState({ identifier: '', password: '' });
     const [loading, setLoading] = useState(false);
+    const handlePushNotif = usePushNotif();
     const removeBox = (time) => {
         refLogin.current.classList.remove('sm:animate-fadeIn');
         refLogin.current.classList.remove('animate-translateY');

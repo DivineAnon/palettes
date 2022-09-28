@@ -1,12 +1,12 @@
 import axios from "axios";
-import { useLayoutEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch, useSelector } from "react-redux";
 import { DashboardLoading, DashboardSearch, DashboardTemplate, PaletteColorSaves } from "../../../components";
 import { colorsGroup, GetToken, stylesPalette } from "../../../lib";
 import { fetchMoreColorsDashboard, selectDashboardColors, selectDashboardColorsPage, selectLoadingFetchMoreDashboardColors, setDashboardColors } from "../../../slices/dashboardSlice";
+import { wrapper } from '../../../store';
 
-export default function ColorsDashboard({ dataColors }){
+export default function ColorsDashboard(){
     const colors = useSelector(selectDashboardColors);
     const colorsPage = useSelector(selectDashboardColorsPage);
     const dispatch = useDispatch();
@@ -49,10 +49,6 @@ export default function ColorsDashboard({ dataColors }){
             </div>
         </section>
     )
-    useLayoutEffect(()=>{
-        dispatch(setDashboardColors(dataColors));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
     return (
         <DashboardTemplate>
             <DashboardSearch title={'Colors'} filtersMenu={filtersMenu} handleSearch={handleSearch}/>
@@ -84,15 +80,15 @@ export default function ColorsDashboard({ dataColors }){
     )
 }
 
-export async function getServerSideProps(ctx){
+export const getServerSideProps = wrapper.getServerSideProps(store => async (ctx) => {
     try {
         const dataColors = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/saves-colors/feed?page=1`,{
             headers: {
                 Authorization: `bearer ${GetToken(ctx)}`
             }
         })
-        return { props: { dataColors: dataColors.data } }
+        store.dispatch(setDashboardColors(dataColors.data));
     } catch (error) {
         return { notFound: true }
     }
-}
+})
