@@ -174,7 +174,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store=> async (ctx)
             store.dispatch(setPalettes({ data: palette.data.simillar, meta: { pagination: { page: 1 } } }));
             return { props: { hexArray: hex.split('-'), palette: palette.data.palette, simillar: palette.data.simillar } }
         } catch (error) {
-            console.log(error.response.data)
             return { notFound: true }
         }
     }else {

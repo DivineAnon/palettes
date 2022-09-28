@@ -29,7 +29,6 @@ export default function PopupSaveGradient(){
     const [showAddTag, setShowAddTag] = useState(false);
     const [loading, setLoading] = useState(false);
     const [showPicker, setShowPicker] = useState(false);
-    console.log(dataShowSaveGradient)
     const [colors, setColors] = useState(JSON.parse(dataShowSaveGradient.gradient.palette));
     const [rotation, setRotation] = useState(dataShowSaveGradient.gradient.rotation);
     const [type,setType] = useState(dataShowSaveGradient.gradient.type);

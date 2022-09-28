@@ -77,7 +77,6 @@ export default function GradientPopup(){
                 type: 'linear'
             };
             data['color_position'] = palettes.map((color,i)=>({ color, position: (100/(palettes.length-1))*i }));
-            console.log(data,'popup')
             removeBox(50);
             dispatch(setDataShowCSSGradient(data));
         }else if (menu==='save') {
