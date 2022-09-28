@@ -25,7 +25,7 @@ export default function Hero(){
         <div className="mt-[120px] md:mt-[180px] md:pl-10 max-w-screen-2xl mx-auto flex-col flex md:flex-row mb-[150px]">
             <div className='max-w-[400px] mx-auto xl:max-w-[500px] order-2 md:order-1'>
                 <h1 className='text-5xl xl:text-7xl mb-8 tracking-tighter font-black text-center'>The super fast color palettes generator!</h1>
-                <p className='text-center mb-10 text-lg xl:w-[80%] mx-auto'>Create the perfect palette or get inspired by thousands of beautiful color schemes.</p>
+                <p className='text-center px-6 mb-10 text-lg xl:w-[80%] mx-auto'>Create the perfect palette or get inspired by thousands of beautiful color schemes.</p>
                 <Link href='/generate'>
                     <a className='block mx-auto w-max px-12 rounded-xl py-2.5 bg-blue-500 transition hover:bg-blue-600 mb-4 text-white font-medium'>Start the generator!</a>
                 </Link>

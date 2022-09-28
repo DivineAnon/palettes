@@ -254,7 +254,7 @@ export default function Header({ isFixed }){
                 </svg>
             </div>
         </div>
-        <div className={`bg-white md:hidden fixed z-50 top-0 left-0 max-w-[320px] mr-4 p-[30px] overflow-auto h-screen duration-300 transition-all ${menuLeft ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className={`bg-white md:hidden fixed z-50 top-0 left-0 max-w-[320px] mr-4 p-[30px] overflow-auto h-full duration-300 transition-all ${menuLeft ? 'translate-x-0' : '-translate-x-full'}`}>
             <Link href="/generate">
                 <a className='font-bold text-[#18D39E] text-[22px] block mb-5'>Palette Generator</a>
             </Link>

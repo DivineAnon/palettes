@@ -1,6 +1,6 @@
 import { Fragment, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { colorsGroup, lightOrDark, useNotifColor, usePushNotif } from "../lib";
+import { colorsGroup, lightOrDark, useIsSm, useNotifColor, usePushNotif } from "../lib";
 import { selectCopyPaletteIndex, setCopyPaletteIndex } from "../slices/globalSlice";
 import { handleAddQuery } from "../slices/palettesSlice";
 import { handleSavePalette, setDataExportPalette, setDataFullscreenPalette, setDataMenuMore, setDataQuickView } from "../slices/popupSlice";
@@ -13,6 +13,7 @@ export default function PaletteSaves({ data }){
     const menuMoreRef = useRef(null);
     const copyColor = useNotifColor();
     const handlePushNotif = usePushNotif();
+    const isSm = useIsSm();
     const handleMenuMore = (menu) => {
         if (menu==='openPalette') {
             window.open(`/palette/${data.palette.palette.join('-')}`);
@@ -39,6 +40,17 @@ export default function PaletteSaves({ data }){
         }
         if (menu==='save') {
             dispatch(handleSavePalette(user,data.palette.palette,'save',null));
+        }
+    }
+    const handleShowQuickView = () => {
+        if (isSm) {
+            dispatch(setDataQuickView(data.palette.palette));
+        }
+    }
+    const handleCopyColor = (color,index) => {
+        if (!isSm) {
+            copyColor(color);
+            dispatch(setCopyPaletteIndex(index));
         }
     }
     const menuMore = ()=> (
@@ -111,10 +123,10 @@ export default function PaletteSaves({ data }){
     )
     return (
         <div className='flex flex-col gap-1.5'>
-            <div className='h-[104px] lg:h-[124px] flex rounded-xl overflow-hidden border border-gray-100'>
+            <div onClick={handleShowQuickView} className='h-[104px] lg:h-[124px] flex rounded-xl overflow-hidden border border-gray-100'>
                 {data.palette.palette.map((color,i)=>(
-                <div onMouseLeave={()=>dispatch(setCopyPaletteIndex(null))} key={i} onClick={()=>{copyColor(color);dispatch(setCopyPaletteIndex(i))}} style={{ backgroundColor: `#${color}` }} className='cursor-pointer transition-all flex-1 hover:basis-20 relative group'>
-                    <span className={`absolute opacity-0 group-hover:opacity-100 transition left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 font-semibold uppercase text-[15px] ${lightOrDark(color)==='light' ? 'text-black' : 'text-white'}`}>{copyPaletteIndex===i ? (
+                <div onMouseLeave={()=>!isSm && dispatch(setCopyPaletteIndex(null))} key={i} onClick={()=>handleCopyColor(color,i)} style={{ backgroundColor: `#${color}` }} className='cursor-pointer transition-all flex-1 sm:hover:basis-20 relative group'>
+                    <span className={`absolute opacity-0 sm:group-hover:opacity-100 transition left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 font-semibold uppercase text-[15px] ${lightOrDark(color)==='light' ? 'text-black' : 'text-white'}`}>{copyPaletteIndex===i ? (
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 animate-scale-check" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>

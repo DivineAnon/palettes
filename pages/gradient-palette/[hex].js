@@ -117,7 +117,7 @@ export default function GradientPalette({ colStartEnd, gradients }){
     return (
         <Layout title={'Create a Gradient palette - Palettes'}>
             <Header/>
-            <div className="mt-[159px] mb-[100px] max-w-screen-xl mx-auto">
+            <div className="mt-[160px] mb-[100px] max-w-screen-xl mx-auto">
                 <h1 className="font-black text-5xl mb-8 text-center tracking-tighter">Gradient Palette</h1>
                 <p className="text-center text-xl text-[#7d7c83] mb-[100px]">Create a gradient palette between two colors.</p>
                 <div className="px-6 md:px-12 xl:px-20">
@@ -190,7 +190,7 @@ export default function GradientPalette({ colStartEnd, gradients }){
                     </div>
                     <div className="mt-[120px]">
                         <h1 className="text-center font-extrabold tracking-tighter text-2xl">Example palettes</h1>
-                        <div className='grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] mt-[60px] md:mt-[100px] gap-x-8 gap-y-6'>
+                        <div className='grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] mt-[60px] md:mt-[100px] gap-x-8 gap-y-6'>
                             {palettes?.data.map((palette,i)=>(
                             <Palette key={i} index={i} data={palette}/>
                             ))}

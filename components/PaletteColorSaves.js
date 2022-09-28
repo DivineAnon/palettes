@@ -13,9 +13,6 @@ export default function PaletteColorSaves({ data }){
     const copyColor = useNotifColor();
     const handlePushNotif = usePushNotif();
     const handleMenuMore = (menu) => {
-        if (menu==='openColor') {
-            window.open(`/user/colors/${data.color}`);
-        }
         if (menu==='openPicker') {
             window.open(`/${data.color}`);
         }
@@ -42,12 +39,6 @@ export default function PaletteColorSaves({ data }){
     const menuMore = ()=> (
         <Fragment>
             <section className="mb-2">
-                <div onClick={()=>handleMenuMore('openColor')} className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                    <span className="md:text-sm font-medium">Open color</span>
-                </div>
                 <div onClick={()=>handleMenuMore('openPicker')} className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-wand" width={20} height={20} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round"
                     >

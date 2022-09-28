@@ -5,7 +5,7 @@ export default function Profile({ profile }){
     return (
         <Layout title={`${profile.fullname} - Palettes`}>
             <Header/>
-            <div className='mt-[150px]'>
+            <div className='mt-[60px] md:mt-[160px]'>
                 <div className='max-w-[576px] mx-auto px-[42px] text-center'>
                     <Avatar className={"mx-auto"} user={profile}/>
                     <h1 className='font-black text-4xl mt-7'>{profile.fullname}</h1>
@@ -28,9 +28,9 @@ export default function Profile({ profile }){
                     </div>
                     )}
                 </div>
-                <div className='max-w-screen-xl mt-[150px] mb-[100px] mx-auto px-6 md:px-12 xl:px-20'>
+                <div className='max-w-screen-xl mt-[60px] md:mt-[120px] mb-[60px] md:mb-[100px] mx-auto px-6 md:px-12 xl:px-20'>
                     {profile?.saves_palette.length>0 ? (
-                    <div className='grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-x-8 gap-y-7'>
+                    <div className='grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-x-8 gap-y-7'>
                         {profile?.saves_palette.map((obj,i)=>(
                         <PaletteSaves key={i} index={i} data={obj}/>
                         ))}

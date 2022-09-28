@@ -147,7 +147,7 @@ export default function PaletteSidebar({ data, saves }){
             <div className="px-1 mt-0.5 flex justify-between items-center">
                 <span className="text-[10px] font-medium">{saves ? data.name : `${data.saveCount} Saves`}</span>
                 <div className="relative">
-                    <svg ref={refMore} onClick={()=>dispatch(setDataMenuMore({ elementRef: refMore.current, width: 222, Children: MenuMore }))} xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${showMenuMore?.elementRef!==refMore?.current && 'invisible group-hover:visible'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <svg ref={refMore} onClick={()=>dispatch(setDataMenuMore({ elementRef: refMore.current, width: 222, Children: MenuMore }))} xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${showMenuMore?.elementRef!==refMore?.current && 'md:invisible md:group-hover:visible'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
                     </svg>
                 </div>

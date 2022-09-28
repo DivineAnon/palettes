@@ -193,8 +193,8 @@ export default function Trending(){
                 </div>
                 )}
                 {queryList.query.length < 2 && queryList.query[0]?.type!=='search' && (
-                <section className={palettes.data.length===0 ? 'hidden' : ''}>
-                    <h1 className='text-center px-3 font-black text-[3.125rem] tracking-tighter'>{queryList.query.length>0 ? queryList.query[0].value : queryList.sort} Color Palettes</h1>
+                <section className={`px-6 ${palettes.data.length===0 ? 'hidden' : ''}`}>
+                    <h1 className='text-center font-black text-[3.125rem] tracking-tighter'>{queryList.query.length>0 ? queryList.query[0].value : queryList.sort} Color Palettes</h1>
                     <div className='max-w-[400px] text-center mx-auto leading-8 text-xl mt-7 text-[#7d7c83] mb-[60px] md:mb-[100px]'>{queryList.query.length > 0 ? `Get inspired by these beautiful ${queryList.query[0].value.toLowerCase()} color schemes and make something cool!` : 'Get inspired by thousands of beautiful color schemes and make something cool!'}</div>
                 </section>
                 )}
@@ -212,12 +212,12 @@ export default function Trending(){
                     </div>
                 </InfiniteScroll>
                 ) : (
-                <div style={{ height: `calc(100vh - ${searchHeight}px)` }} className='flex flex-col items-center justify-center'>
+                <div style={{ height: `calc(100vh - ${searchHeight}px)` }} className='flex flex-col items-center justify-center px-6'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-16 h-16">
                         <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z" clipRule="evenodd" />
                     </svg>
                     <h1 className='mt-10 font-medium text-[1.3125rem]'>No palettes found</h1>
-                    <p className='text-[#7d7c83] mt-5'>It seems we {"cant't"} find any results based on your search.</p>
+                    <p className='text-[#7d7c83] mt-5 text-center'>It seems we {"cant't"} find any results based on your search.</p>
                 </div>
                 )}
             </div>
