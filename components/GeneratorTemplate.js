@@ -179,8 +179,10 @@ export default function GeneratorTemplate({ colorProps }){
     }
     useEffect(()=>{
         if (showShades!==null) {
-            const clickEvent = () => {
-                setShowShades(null);
+            const clickEvent = (e) => {
+                if (!e.target.closest('.btnShades')) {
+                    setShowShades(null);
+                }
             }
             window.addEventListener('click',clickEvent);
             return ()=> window.removeEventListener('click',clickEvent);
@@ -241,7 +243,7 @@ export default function GeneratorTemplate({ colorProps }){
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[isMd,paletteRef.current])
     const Container = SortableContainer(({ children })=>(
-        <div id="doc" className={`bg-white overflow-hidden w-full flex flex-col md:flex-row ${isolateColor && 'p-2.5 gap-2.5'} ${zenMode ? 'h-full z-[999] fixed' : 'h-[calc(100vh-114px)] md:h-[calc(100vh-112px)]'}`}>
+        <div id="doc" className={`bg-white overflow-hidden w-full flex flex-col md:flex-row ${isolateColor && 'p-2.5 gap-2.5'} ${zenMode ? 'h-full z-[999] fixed' : 'h-[calc(100vh-114px)] md:h-[calc(100vh-113px)]'}`}>
             {zenMode && (
             <div onClick={exitFullscreen} className="bg-white z-[999] border rounded-full h-max w-max p-1.5 fixed right-5 top-5 cursor-pointer hover:bg-gray-50 transition">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -300,7 +302,7 @@ export default function GeneratorTemplate({ colorProps }){
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     )}
-                    <svg onClick={()=>setShowShades(i)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-9 w-9 mx-auto cursor-pointer hover:bg-black/10 p-1.5 rounded-lg transition hidden md:group-hover:block">
+                    <svg onClick={()=>setShowShades(i)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="btnShades h-9 w-9 mx-auto cursor-pointer hover:bg-black/10 p-1.5 rounded-lg transition hidden md:group-hover:block">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 6.878V6a2.25 2.25 0 012.25-2.25h7.5A2.25 2.25 0 0118 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 004.5 9v.878m13.5-3A2.25 2.25 0 0119.5 9v.878m0 0a2.246 2.246 0 00-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0121 12v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6c0-.98.626-1.813 1.5-2.122" />
                     </svg>
                     <svg onClick={()=>dispatch(handleSaveColor(user,'save',color))} xmlns="http://www.w3.org/2000/svg" className="h-9 w-9 mx-auto cursor-pointer hover:bg-black/10 p-1.5 rounded-lg transition hidden md:group-hover:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -396,7 +398,7 @@ export default function GeneratorTemplate({ colorProps }){
             {!zenMode && (
             <Fragment>
                 <Header/>
-                <div className="top-full -translate-y-full border-t md:border-t-0 md:top-[59px] md:translate-y-0 w-full bg-white z-20 fixed flex md:justify-end lg:justify-between items-center border-b px-4 md:px-6 py-2">
+                <div className="top-full -translate-y-full border-t md:border-t-0 md:top-[60px] md:translate-y-0 w-full bg-white z-20 fixed flex md:justify-end lg:justify-between items-center border-b px-4 md:px-6 py-2">
                     <p className="text-[15px] hidden lg:block text-gray-500 font-medium">Press the spacebar to generate color palettes!</p>
                     <div className="flex justify-between w-full md:w-max">
                         <button onClick={generateColorsByBtn} className="block md:hidden border text-sm px-3 rounded-md py-1.5 font-medium transition hover:border-gray-400">Generate</button>
@@ -459,7 +461,7 @@ export default function GeneratorTemplate({ colorProps }){
                 </div>
             </Fragment>
             )}
-            <div className={`duration-300 ${zenMode && 'fixed'} ${(showSidebar || showAdjust || showBlindSimulator) && !isMd ? 'w-[calc(100%-300px)]' : 'w-full'} ${(!zenMode && !isMd) && 'md:mt-[112px]'}`}>
+            <div className={`duration-300 ${zenMode && 'fixed'} ${(showSidebar || showAdjust || showBlindSimulator) && !isMd ? 'w-[calc(100%-300px)]' : 'w-full'} ${(!zenMode && !isMd) && 'md:mt-[113px]'}`}>
             {(!showAdjust && !showBlindSimulator) ? (
                 <Fragment>
                     {(focusColor!==null && !isMd) && (
@@ -472,7 +474,7 @@ export default function GeneratorTemplate({ colorProps }){
                     </Container>
                 </Fragment>
             ) : (
-                <div className="h-[calc(100vh-112px)] w-full flex flex-col">
+                <div className="h-[calc(100vh-113px)] w-full flex flex-col">
                     <div className="flex-1 flex">
                         {colors.map((color,i)=>(
                             <div key={i} style={{ backgroundColor: `#${color}` }} className="flex-1 flex items-center justify-center">

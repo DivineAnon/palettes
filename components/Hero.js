@@ -26,12 +26,14 @@ export default function Hero(){
             <div className='max-w-[400px] mx-auto xl:max-w-[500px] order-2 md:order-1'>
                 <h1 className='text-5xl xl:text-7xl mb-8 tracking-tighter font-black text-center'>The super fast color palettes generator!</h1>
                 <p className='text-center px-6 mb-10 text-lg xl:w-[80%] mx-auto'>Create the perfect palette or get inspired by thousands of beautiful color schemes.</p>
-                <Link href='/generate'>
-                    <a className='block mx-auto w-max px-12 rounded-xl py-2.5 bg-blue-500 transition hover:bg-blue-600 mb-4 text-white font-medium'>Start the generator!</a>
-                </Link>
-                <Link href='/palettes'>
-                    <a className='block mx-auto w-max px-7 rounded-xl py-2.5 transition hover:border-gray-400 border border-gray-300 font-medium'>Explore trending palettes</a>
-                </Link>
+                <div className='block w-[260px] mx-auto'>
+                    <Link href='/generate'>
+                        <a className='block w-full text-center px-[21px] whitespace-nowrap h-[46px] leading-[46px] rounded-xl bg-blue-500 transition hover:bg-blue-600 mb-4 text-white font-medium'>Start the generator!</a>
+                    </Link>
+                    <Link href='/palettes'>
+                        <a className='block w-full text-center px-[21px] whitespace-nowrap h-[46px] leading-[46px] rounded-xl transition hover:border-gray-400 border border-gray-300 font-medium'>Explore trending palettes</a>
+                    </Link>
+                </div>
             </div>
             <div className='flex-1 order-1 md:order-2 relative overflow-hidden'>
                 <img alt='hero' className='w-[560px] xl:w-[690px] 2xl:w-[660px] hidden md:block h-auto bg-repeat-y img-hero -z-10 top-0 left-[210px] xl:left-[255px] 2xl:left-[310px] absolute' src="/hero_palettes.png" />
