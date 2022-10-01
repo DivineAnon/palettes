@@ -3,7 +3,7 @@ import chroma from "chroma-js";
 import { useRouter } from "next/router";
 import { useRef, useState, Fragment, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetToken, usePushNotif,  } from "../lib";
+import { getColorGroup, GetToken, lightOrDark, usePushNotif,  } from "../lib";
 import { addDashboardColor, updateDashboardColor } from "../slices/dashboardSlice";
 import { selectSaveColor, setSaveColor } from "../slices/popupSlice";
 import { addUserCollection, addUserProject, selectUser } from "../slices/userSlice";
@@ -104,7 +104,9 @@ export default function PopupSaveColor(){
                         ...dataSave,
                         name: dataSave.name ? dataSave.name : 'My new color',
                         color: dataSaveColor.color,
-                        author: user.id
+                        author: user.id,
+                        colorGroup: getColorGroup(dataSaveColor.color),
+                        style: lightOrDark(dataSaveColor.color)==='light' ? 'Bright' : 'Dark'
                     },
                 },{
                     headers: {
@@ -123,7 +125,9 @@ export default function PopupSaveColor(){
                         ...dataSave,
                         name: dataSave.name ? dataSave.name : 'My new color',
                         color: dataSaveColor.color,
-                        author: user.id
+                        author: user.id,
+                        colorGroup: getColorGroup(dataSaveColor.color),
+                        style: lightOrDark(dataSaveColor.color)==='light' ? 'Bright' : 'Dark'
                     },
                     colorId: dataSaveColor.data.id
                 },{

@@ -11,7 +11,7 @@ const initialState = {
             }
         },
         loadingFetchMore: false,
-        detail: null
+        detail: null,
     },
     gradients: {
         data: [],
@@ -51,8 +51,8 @@ const initialState = {
     }
 }
 
-export const fetchMorePalettesDashboard = createAsyncThunk('dashboard/fetchPalettes', async (page) => {
-    const palettes = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/saves-palettes/feed?page=${page}`,{
+export const fetchMorePalettesDashboard = createAsyncThunk('dashboard/fetchPalettes', async (query) => {
+    const palettes = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/saves-palettes/feed?${query}`,{
         headers: {
             Authorization: `bearer ${GetToken()}`
         }
@@ -60,8 +60,8 @@ export const fetchMorePalettesDashboard = createAsyncThunk('dashboard/fetchPalet
     return palettes.data;
 })
 
-export const fetchMoreGradientsDashboard = createAsyncThunk('dashboard/fetchGradients', async (page) => {
-    const gradients = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/saves-gradients/feed?page=${page}`,{
+export const fetchMoreGradientsDashboard = createAsyncThunk('dashboard/fetchGradients', async (query) => {
+    const gradients = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/saves-gradients/feed?${query}`,{
         headers: {
             Authorization: `bearer ${GetToken()}`
         }
@@ -69,8 +69,8 @@ export const fetchMoreGradientsDashboard = createAsyncThunk('dashboard/fetchGrad
     return gradients.data;
 })
 
-export const fetchMoreColorsDashboard = createAsyncThunk('dashboard/fetchColors', async (page) => {
-    const colors = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/saves-colors/feed?page=${page}`,{
+export const fetchMoreColorsDashboard = createAsyncThunk('dashboard/fetchColors', async (query) => {
+    const colors = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/saves-colors/feed?${query}`,{
         headers: {
             Authorization: `bearer ${GetToken()}`
         }
@@ -78,8 +78,8 @@ export const fetchMoreColorsDashboard = createAsyncThunk('dashboard/fetchColors'
     return colors.data;
 })
 
-export const fetchMoreProjectsDashboard = createAsyncThunk('dashboard/fetchProjects', async (page) => {
-    const projects = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/projects/feed?page=${page}`,{
+export const fetchMoreProjectsDashboard = createAsyncThunk('dashboard/fetchProjects', async (query) => {
+    const projects = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/projects/feed?${query}`,{
         headers: {
             Authorization: `bearer ${GetToken()}`
         }
@@ -87,8 +87,8 @@ export const fetchMoreProjectsDashboard = createAsyncThunk('dashboard/fetchProje
     return projects.data;
 })
 
-export const fetchMoreCollectionsDashboard = createAsyncThunk('dashboard/fetchCollections', async (page) => {
-    const collections = await axios.post(`${process.env.NEXT_PUBLIC_API}/api/collections/feed?page=${page}`,null,{
+export const fetchMoreCollectionsDashboard = createAsyncThunk('dashboard/fetchCollections', async (query) => {
+    const collections = await axios.post(`${process.env.NEXT_PUBLIC_API}/api/collections/feed?${query}`,null,{
         headers: {
             Authorization: `bearer ${GetToken()}`
         }
