@@ -20,7 +20,8 @@ const initialState = {
                 page: 1
             }
         },
-        loadingFetchMore: false
+        loadingFetchMore: false,
+        detail: null
     },
     colors: {
         data: [],
@@ -29,7 +30,8 @@ const initialState = {
                 page: 1
             }
         },
-        loadingFetchMore: false
+        loadingFetchMore: false,
+        detail: null
     },
     projects: {
         data: [],
@@ -38,7 +40,13 @@ const initialState = {
                 page: 1
             }
         },
-        loadingFetchMore: false
+        loadingFetchMore: false,
+        detail: {
+            project: null,
+            palettes: null,
+            gradients: null,
+            colors: null
+        }
     },
     collections: {
         data: [],
@@ -47,7 +55,13 @@ const initialState = {
                 page: 1
             }
         },
-        loadingFetchMore: false
+        loadingFetchMore: false,
+        detail: {
+            collection: null,
+            palettes: null,
+            gradients: null,
+            colors: null
+        }
     }
 }
 
@@ -135,6 +149,9 @@ export const dashboardSlice = createSlice({
             const findIndex = state.gradients.data.findIndex(gradient=>gradient.id===action.payload.id);
             state.gradients.data[findIndex] = action.payload;
         },
+        setDetailDashboardGradient: (state,action) => {
+            state.gradients.detail = action.payload;
+        },
         //colors
         setDashboardColors: (state,action) => {
             state.colors.data = action.payload.data;
@@ -150,6 +167,9 @@ export const dashboardSlice = createSlice({
         deleteDashboardColor: (state,action) => {
             const newColors = state.colors.data.filter(color=>color.id!==action.payload);
             state.colors.data = newColors;
+        },
+        setDetailDashboardColor: (state,action) => {
+            state.colors.detail = action.payload;
         },
         //projects
         setDashboardProjects: (state,action) => {
@@ -167,6 +187,54 @@ export const dashboardSlice = createSlice({
             const newProjects = state.projects.data.filter(project=>project.id!==action.payload);
             state.projects.data = newProjects;
         },
+        setDetailDashboardProject: (state,action) => {
+            state.projects.detail.project = action.payload;
+        },
+        setDetailDashboardProjectPalettes: (state,action) => {
+            state.projects.detail.palettes = action.payload;
+        },
+        addDetailDashboardProjectPalettesData: (state,action) => {
+            state.projects.detail.palettes.data = [action.payload,...state.projects.detail.palettes.data];
+            state.projects.detail.palettes.count += 1;
+        },
+        removeDetailDashboardProjectPalettesData: (state,action) => {
+            state.projects.detail.palettes.data = state.projects.detail.palettes.data.filter(palette=>palette.id!==action.payload);
+            state.projects.detail.palettes.count -= 1;
+        },
+        updateDetailDashboardProjectPalettesData: (state,action) => {
+            const index = state.projects.detail.palettes.data.findIndex(palette=>palette.id===action.payload.id);
+            state.projects.detail.palettes.data[index] = action.payload;
+        },
+        setDetailDashboardProjectColors: (state,action) => {
+            state.projects.detail.colors = action.payload;
+        },
+        addDetailDashboardProjectColorsData: (state,action) => {
+            state.projects.detail.colors.data = [action.payload,...state.projects.detail.colors.data];
+            state.projects.detail.colors.count += 1;
+        },
+        removeDetailDashboardProjectColorsData: (state,action) => {
+            state.projects.detail.colors.data = state.projects.detail.colors.data.filter(color=>color.id!==action.payload);
+            state.projects.detail.colors.count -= 1;
+        },
+        updateDetailDashboardProjectColorsData: (state,action) => {
+            let index = state.projects.detail.colors.data.findIndex(color=>color.id===action.payload.id);
+            state.projects.detail.colors.data[index] = action.payload;
+        },
+        setDetailDashboardProjectGradients: (state,action) => {
+            state.projects.detail.gradients = action.payload;
+        },
+        addDetailDashboardProjectGradientsData: (state,action) => {
+            state.projects.detail.gradients.data = [action.payload,...state.projects.detail.gradients.data];
+            state.projects.detail.gradients.count += 1;
+        },
+        removeDetailDashboardProjectGradientsData: (state,action) => {
+            state.projects.detail.gradients.data = state.projects.detail.gradients.data.filter(gradient=>gradient.id!==action.payload);
+            state.projects.detail.gradients.count -= 1;
+        },
+        updateDetailDashboardProjectGradientsData: (state,action) => {
+            const index = state.projects.detail.gradients.data.findIndex(gradient=>gradient.id===action.payload.id);
+            state.projects.detail.gradients.data[index] = action.payload;
+        },
         //collections
         setDashboardCollections: (state,action) => {
             state.collections.data = action.payload.data;
@@ -182,7 +250,55 @@ export const dashboardSlice = createSlice({
         deleteDashboardCollection: (state,action) => {
             const newCollections = state.collections.data.filter(collection=>collection.id!==action.payload);
             state.collections.data = newCollections;
-        }
+        },
+        setDetailDashboardCollection: (state,action) => {
+            state.collections.detail.collection = action.payload;
+        },
+        setDetailDashboardCollectionPalettes: (state,action) => {
+            state.collections.detail.palettes = action.payload;
+        },
+        setDetailDashboardCollectionColors: (state,action) => {
+            state.collections.detail.colors = action.payload;
+        },
+        addDetailDashboardCollectionColors: (state,action) => {
+            state.collections.detail.colors.data = [action.payload,...state.collections.detail.colors.data];
+            state.collections.detail.colors.count += 1;
+        },
+        removeDetailDashboardCollectionColors: (state,action) => {
+            state.collections.detail.colors.data = state.collections.detail.colors.data.filter(c=>c.id!==action.payload);
+            state.collections.detail.colors.count -= 1;
+        },
+        updateDetailDashboardCollectionColors: (state,action) => {
+            const index = state.collections.detail.colors.data.findIndex(c=>c.id===action.payload.id);
+            state.collections.detail.colors.data[index] = action.payload;
+        },
+        addDetailDashboardCollectionGradients: (state,action) => {
+            state.collections.detail.gradients.data = [action.payload,...state.collections.detail.gradients.data];
+            state.collections.detail.gradients.count += 1;
+        },
+        removeDetailDashboardCollectionGradients: (state,action) => {
+            state.collections.detail.gradients.data = state.collections.detail.gradients.data.filter(g=>g.id!==action.payload);
+            state.collections.detail.gradients.count -= 1;
+        },
+        updateDetailDashboardCollectionGradients: (state,action) => {
+            const index = state.collections.detail.gradients.data.findIndex(g=>g.id===action.payload.id);
+            state.collections.detail.gradients.data[index] = action.payload;
+        },
+        addDetailDashboardCollectionPalettes: (state,action) => {
+            state.collections.detail.palettes.data = [action.payload,...state.collections.detail.palettes.data];
+            state.collections.detail.palettes.count += 1;
+        },
+        removeDetailDashboardCollectionPalettes: (state,action) => {
+            state.collections.detail.palettes.data = state.collections.detail.palettes.data.filter(p=>p.id!==action.payload);
+            state.collections.detail.palettes.count -= 1;
+        },
+        updateDetailDashboardCollectionPalettes: (state,action) => {
+            const index = state.collections.detail.palettes.data.findIndex(p=>p.id===action.payload.id);
+            state.collections.detail.palettes.data[index] = action.payload;
+        },
+        setDetailDashboardCollectionGradients: (state,action) => {
+            state.collections.detail.gradients = action.payload;
+        },
     },
     extraReducers(builder) {
         builder
@@ -261,15 +377,43 @@ export const {
     updateDashboardProject, 
     addDashboardProject, 
     deleteDashboardProject, 
+    setDetailDashboardProject,
+    setDetailDashboardProjectPalettes,
+    addDetailDashboardProjectPalettesData,
+    removeDetailDashboardProjectPalettesData,
+    updateDetailDashboardProjectPalettesData,
+    setDetailDashboardProjectColors,
+    addDetailDashboardProjectColorsData,
+    removeDetailDashboardProjectColorsData,
+    updateDetailDashboardProjectColorsData,
+    setDetailDashboardProjectGradients,
+    addDetailDashboardProjectGradientsData,
+    removeDetailDashboardProjectGradientsData,
+    updateDetailDashboardProjectGradientsData,
     addDashboardColor, 
     updateDashboardColor, 
     deleteDashboardColor, 
+    setDetailDashboardColor,
     addDashboardCollection, 
     updateDashboardCollection, 
-    deleteDashboardCollection, 
+    deleteDashboardCollection,
+    setDetailDashboardCollection,
+    setDetailDashboardCollectionPalettes,
+    setDetailDashboardCollectionColors,
+    setDetailDashboardCollectionGradients,
     addDashboardGradient, 
     deleteDashboardGradient, 
-    updateDashboardGradient
+    updateDashboardGradient,
+    setDetailDashboardGradient,
+    addDetailDashboardCollectionColors,
+    updateDetailDashboardCollectionColors,
+    addDetailDashboardCollectionGradients,
+    addDetailDashboardCollectionPalettes,
+    removeDetailDashboardCollectionPalettes,
+    removeDetailDashboardCollectionColors,
+    removeDetailDashboardCollectionGradients,
+    updateDetailDashboardCollectionGradients,
+    updateDetailDashboardCollectionPalettes,
  } = dashboardSlice.actions;
 
 export const selectDashboardPalettes = (state) => state.dashboard.palettes;
@@ -281,17 +425,27 @@ export const selectDetailDashboardPalette = (state) => state.dashboard.palettes.
 export const selectDashboardGradients = (state) => state.dashboard.gradients;
 export const selectDashboardGradientsPage = (state) => state.dashboard.gradients.meta.pagination.page;
 export const selectLoadingFetchMoreDashboardGradients = (state) => state.dashboard.gradients.loadingFetchMore;
+export const selectDetailDashboardGradient = (state) => state.dashboard.gradients.detail;
 
 export const selectDashboardColors = (state) => state.dashboard.colors;
 export const selectDashboardColorsPage = (state) => state.dashboard.colors.meta.pagination.page;
 export const selectLoadingFetchMoreDashboardColors = (state) => state.dashboard.colors.loadingFetchMore;
+export const selectDetailDashboardColor = (state) => state.dashboard.colors.detail;
 
 export const selectDashboardProjects = (state) => state.dashboard.projects;
 export const selectDashboardProjectsPage = (state) => state.dashboard.projects.meta.pagination.page;
 export const selectLoadingFetchMoreDashboardProjects = (state) => state.dashboard.projects.loadingFetchMore;
+export const selectDetailDashboardProject = (state) => state.dashboard.projects.detail.project;
+export const selectDetailDashboardProjectPalettes = (state) => state.dashboard.projects.detail.palettes;
+export const selectDetailDashboardProjectColors = (state) => state.dashboard.projects.detail.colors;
+export const selectDetailDashboardProjectGradients = (state) => state.dashboard.projects.detail.gradients;
 
 export const selectDashboardCollections = (state) => state.dashboard.collections;
 export const selectDashboardCollectionsPage = (state) => state.dashboard.collections.meta.pagination.page;
 export const selectLoadingFetchMoreDashboardCollections = (state) => state.dashboard.collections.loadingFetchMore;
+export const selectDetailDashboardCollection = (state) => state.dashboard.collections.detail.collection;
+export const selectDetailDashboardCollectionPalettes = (state) => state.dashboard.collections.detail.palettes;
+export const selectDetailDashboardCollectionColors = (state) => state.dashboard.collections.detail.colors;
+export const selectDetailDashboardCollectionGradients = (state) => state.dashboard.collections.detail.gradients;
 
 export default dashboardSlice.reducer;

@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useState, useRef, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { dataCreatePalette, GetToken, lightOrDark, usePushNotif } from "../lib";
-import { addDashboardPalette, setDetailDashboardPalette, updateDashboardPalette } from "../slices/dashboardSlice";
+import { addDashboardPalette, addDetailDashboardCollectionPalettes, addDetailDashboardProjectPalettesData, setDetailDashboardPalette, updateDashboardPalette, updateDetailDashboardCollectionPalettes, updateDetailDashboardProjectPalettesData } from "../slices/dashboardSlice";
 import { updateLikePalette } from "../slices/palettesSlice";
 import { selectSavePalette, setSavePalette } from "../slices/popupSlice";
 import { addNewPaletteLibrary, updatePaletteLibrary } from "../slices/sidebarSlice";
@@ -162,6 +162,18 @@ export default function PopupSavePalette(){
                 if (Router.pathname==='/user/palettes') {
                     dispatch(addDashboardPalette(save.data.saved));
                 }
+                if (Router.pathname==='/user/projects/[id]/palettes') {
+                    const { id } = Router.query;
+                    if (dataSavePalette.projects.map(p=>p.id).includes(parseInt(id))) {
+                        dispatch(addDetailDashboardProjectPalettesData(save.data.saved));
+                    }
+                }
+                if (Router.pathname==='/user/collections/[id]/palettes') {
+                    const { id } = Router.query;
+                    if (dataSavePalette.collections.map(p=>p.id).includes(parseInt(id))) {
+                        dispatch(addDetailDashboardCollectionPalettes(save.data.saved));
+                    }
+                }
                 setLoading(null);
                 dispatch(setSavePalette(null));
                 handlePushNotif({ text: 'Palette saved succesfully!', className: 'bg-black', icon: 'checklist' });
@@ -191,6 +203,10 @@ export default function PopupSavePalette(){
                     dispatch(updateDashboardPalette(saves));
                 }else if (Router.pathname==='/user/palettes/[slug]') {
                     dispatch(setDetailDashboardPalette(saves));
+                }else if (Router.pathname==='/user/projects/[id]/palettes') {
+                    dispatch(updateDetailDashboardProjectPalettesData(saves));
+                }else if (Router.pathname==='/user/collections/[id]/palettes') {
+                    dispatch(updateDetailDashboardCollectionPalettes(saves));
                 }
                 setLoading(null);
                 dispatch(setSavePalette(null));
@@ -215,10 +231,10 @@ export default function PopupSavePalette(){
     useLayoutEffect(()=>{
         if (dataPalette.data) {
             const { name, description, tags, projects, collections } = dataPalette.data;
-            setDataSavePalette({ name: name ? name + (dataPalette.action==='duplicate' ? ' Copy' : '') : '', description: description ? description : '', projects, collections, tags: tags ? tags : [] });
-            if (dataPalette.menu) {
-                setActiveMenu(dataPalette.menu);
-            }
+            setDataSavePalette({ name: name ? name + (dataPalette.action==='duplicate' ? ' Copy' : '') : '', description: description ? description : '', projects: projects ? projects : [], collections: collections ? collections : [], tags: tags ? tags : [] });
+        }
+        if (dataPalette.menu) {
+            setActiveMenu(dataPalette.menu);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
@@ -233,7 +249,7 @@ export default function PopupSavePalette(){
                     <svg onClick={()=>removeBox(100)} xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 absolute left-2 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-100 transition cursor-pointer p-1.5 rounded-lg" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
-                    <h1 className="font-semibold text-center">Save Palette</h1>
+                    <h1 className="font-semibold text-center">{dataPalette.action==='save' ? 'Save' : dataPalette.action==='duplicate' ? 'Duplicate' : 'Edit'} Palette</h1>
                 </div>
                 <div className="flex justify-center items-center text-[15px]">
                     <button onClick={()=>setActiveMenu('info')} className={`py-3.5 px-3 font-medium transition relative text-scondary ${activeMenu==='info' ? "before:content-[''] before:w-full before:left-0 before:top-full before:h-[2px] before:bg-blue-500 before:-translate-y-[2px] before:absolute text-blue-500" : 'hover:text-black' }`}>Info</button>

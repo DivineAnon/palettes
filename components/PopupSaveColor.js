@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useRef, useState, Fragment, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getColorGroup, GetToken, lightOrDark, usePushNotif,  } from "../lib";
-import { addDashboardColor, updateDashboardColor } from "../slices/dashboardSlice";
+import { addDashboardColor, addDetailDashboardCollectionColors, addDetailDashboardProjectColorsData, setDetailDashboardColor, updateDashboardColor, updateDetailDashboardCollectionColors, updateDetailDashboardProjectColorsData } from "../slices/dashboardSlice";
 import { selectSaveColor, setSaveColor } from "../slices/popupSlice";
 import { addUserCollection, addUserProject, selectUser } from "../slices/userSlice";
 import ColorPickerRelative from "./ColorPickerRelative";
@@ -115,6 +115,16 @@ export default function PopupSaveColor(){
                 })
                 if (Router.pathname==='/user/colors') {
                     dispatch(addDashboardColor(save.data));
+                }else if (Router.pathname==='/user/projects/[id]/colors') {
+                    const { id } = Router.query;
+                    if (dataSave.projects.map(p=>p.id).includes(parseInt(id))) {
+                        dispatch(addDetailDashboardProjectColorsData(save.data));
+                    }
+                }else if (Router.pathname==='/user/collections/[id]/colors') {
+                    const { id } = Router.query;
+                    if (dataSave.collections.map(col=>col.id).includes(parseInt(id))) {
+                        dispatch(addDetailDashboardCollectionColors(save.data));
+                    }
                 }
                 setLoading(null);
                 dispatch(setSaveColor(null));
@@ -137,10 +147,16 @@ export default function PopupSaveColor(){
                 })
                 if (Router.pathname==='/user/colors') {
                     dispatch(updateDashboardColor(update.data));
+                }else if (Router.pathname==='/user/colors/[hex]') {
+                    dispatch(setDetailDashboardColor(update.data));
+                }else if (Router.pathname==='/user/projects/[id]/colors') {
+                    dispatch(updateDetailDashboardProjectColorsData(update.data));
+                }else if (Router.pathname==='/user/collections/[id]/colors') {
+                    dispatch(updateDetailDashboardCollectionColors(update.data));
                 }
                 setLoading(null);
                 dispatch(setSaveColor(null));
-                handlePushNotif({ text: 'Color saved succesfully!', className: 'bg-black', icon: 'checklist' });
+                handlePushNotif({ text: 'Color updated succesfully!', className: 'bg-black', icon: 'checklist' });
             }
         }
     }
@@ -157,7 +173,7 @@ export default function PopupSaveColor(){
     useLayoutEffect(()=>{
         if (dataSaveColor.data) {
             const { name, projects, collections } = dataSaveColor.data;
-            setDataSave({ name: name ? name + (dataSaveColor.action==='duplicate' ? ' Copy' : '') : '', projects, collections });
+            setDataSave({ name: name ? name + (dataSaveColor.action==='duplicate' ? ' Copy' : '') : '', projects: projects ? projects : [] , collections: collections ? collections : [] });
         }
         if (dataSaveColor.menu) {
             setActiveMenu(dataSaveColor.menu);
@@ -171,7 +187,7 @@ export default function PopupSaveColor(){
                     <svg onClick={()=>removeBox(100)} xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 absolute left-2 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-100 transition cursor-pointer p-1.5 rounded-lg" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
-                    <h1 className="font-semibold text-center">Save Color</h1>
+                    <h1 className="font-semibold text-center">{dataSaveColor.action==='save' ? 'Save' : 'Edit'} Color</h1>
                 </div>
                 <div className="flex justify-center items-center text-[15px]">
                     <button onClick={()=>setActiveMenu('info')} className={`py-3.5 px-3 font-medium transition relative text-scondary ${activeMenu==='info' ? "before:content-[''] before:w-full before:left-0 before:top-full before:h-[2px] before:bg-blue-500 before:-translate-y-[2px] before:absolute text-blue-500" : 'hover:text-black' }`}>Info</button>

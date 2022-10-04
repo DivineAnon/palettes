@@ -62,7 +62,8 @@ export default function RegisterPopup(){
                     });
                     if (res.data) {
                         nookies.set(null,'token',res.data.jwt,{
-                            path: '/'
+                            path: '/',
+                            maxAge: 30 * 24 * 60 * 60,
                         });
                         const user = await Authorization();
                         dispatch(setUser(user));

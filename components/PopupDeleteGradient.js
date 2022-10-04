@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetToken, usePushNotif } from "../lib";
-import { deleteDashboardGradient } from "../slices/dashboardSlice";
+import { deleteDashboardGradient, removeDetailDashboardCollectionGradients, removeDetailDashboardProjectGradientsData } from "../slices/dashboardSlice";
 import { selectIdDeleteGradient, setDataDeleteGradient } from "../slices/popupSlice";
 import ContainerPopup from "./ContainerPopup";
 import Spinner from "./Spinner";
@@ -25,6 +25,10 @@ export default function PopupDeleteGradient(){
         const { id } = color.data;
         if (Router.pathname==='/user/gradients') {
             dispatch(deleteDashboardGradient(id));
+        }else if (Router.pathname==='/user/projects/[id]/gradients') {
+            dispatch(removeDetailDashboardProjectGradientsData(id));
+        }else if (Router.pathname==='/user/collections/[id]/gradients') {
+            dispatch(removeDetailDashboardCollectionGradients(id));
         }
         setLoading(false);
         dispatch(setDataDeleteGradient(null));

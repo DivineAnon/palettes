@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useRef , useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetToken, usePushNotif,  } from "../lib";
-import { addDashboardProject, updateDashboardProject } from "../slices/dashboardSlice";
+import { addDashboardProject, setDetailDashboardProject, updateDashboardProject } from "../slices/dashboardSlice";
 import { closePopupProject, selectDataPopupProject } from "../slices/popupSlice";
 import { addUserProject, selectUser, updateUserProject } from "../slices/userSlice";
 import ContainerPopup from "./ContainerPopup";
@@ -39,6 +39,8 @@ export default function PopupCreateProject(){
                 dispatch(updateUserProject(project));
                 if (Router.pathname==='/user/projects') {
                     dispatch(updateDashboardProject(project));
+                }else if (Router.pathname.split('/').slice(0,4).join('/')==='/user/projects/[id]') {
+                    dispatch(setDetailDashboardProject(project));
                 }
                 setLoading(false);
                 dispatch(closePopupProject())
@@ -83,7 +85,7 @@ export default function PopupCreateProject(){
                     <svg onClick={()=>removeBox(100)} xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 absolute left-2 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-100 transition cursor-pointer p-1.5 rounded-lg" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
-                    <h1 className="font-semibold text-center">Create a project</h1>
+                    <h1 className="font-semibold text-center">{dataPopupProject.data ? 'Edit' : 'Create a'} project</h1>
                 </div>
                 <form onSubmit={handleCreateProject} method="post" className="divide-y">
                     <div className="p-6">

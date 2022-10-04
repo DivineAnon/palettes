@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useRef , useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetToken, usePushNotif,  } from "../lib";
-import { addDashboardCollection, updateDashboardCollection } from "../slices/dashboardSlice";
+import { addDashboardCollection, setDetailDashboardCollection, updateDashboardCollection } from "../slices/dashboardSlice";
 import { closePopupCollection, selectDataPopupCollection } from "../slices/popupSlice";
 import { addUserCollection, selectUser, updateUserCollection } from "../slices/userSlice";
 import ContainerPopup from "./ContainerPopup";
@@ -39,6 +39,9 @@ export default function PopupCreateCollection(){
                 dispatch(updateUserCollection(collection));
                 if (Router.pathname==='/user/collections') {
                     dispatch(updateDashboardCollection(collection));
+                }else if (Router.pathname.split('/').slice(0,4).join('/')==='/user/collections/[id]') {
+                    console.log('masuk sini')
+                    dispatch(setDetailDashboardCollection(collection));
                 }
                 setLoading(false);
                 dispatch(closePopupCollection());

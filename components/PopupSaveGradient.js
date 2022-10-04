@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useRef, useState, Fragment, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { dataCreateGradient, GetToken, usePushNotif,  } from "../lib";
-import { addDashboardGradient, updateDashboardGradient } from "../slices/dashboardSlice";
+import { addDashboardGradient, addDetailDashboardCollectionGradients, addDetailDashboardProjectGradientsData, setDetailDashboardGradient, updateDashboardGradient, updateDetailDashboardCollectionGradients, updateDetailDashboardProjectGradientsData } from "../slices/dashboardSlice";
 import { updateLikeGradient } from "../slices/gradientsSlice";
 import { closePopupGradient, selectDataPopupGradient, setDataMenuMore } from "../slices/popupSlice";
 import { addUserCollection, addUserProject, selectUser } from "../slices/userSlice";
@@ -131,6 +131,18 @@ export default function PopupSaveGradient(){
                 if (Router.pathname==='/user/gradients') {
                     dispatch(addDashboardGradient(save.data.saved));
                 }
+                if (Router.pathname==='/user/projects/[id]/gradients') {
+                    const { id } = Router.query;
+                    if (dataSave.projects.map(p=>p.id).includes(parseInt(id))) {
+                        dispatch(addDetailDashboardProjectGradientsData(save.data.saved));
+                    }
+                }
+                if (Router.pathname==='/user/collections/[id]/gradients') {
+                    const { id } = Router.query;
+                    if (dataSave.collections.map(p=>p.id).includes(parseInt(id))) {
+                        dispatch(addDetailDashboardCollectionGradients(save.data.saved));
+                    }
+                }
                 setLoading(null);
                 dispatch(closePopupGradient());
                 handlePushNotif({ text: 'Gradient saved succesfully!', className: 'bg-black', icon: 'checklist' });
@@ -156,6 +168,12 @@ export default function PopupSaveGradient(){
                 const gradient = edit.data;
                 if (Router.pathname==='/user/gradients') {
                     dispatch(updateDashboardGradient(gradient));
+                }else if (Router.pathname==='/user/gradients/[id]') {
+                    dispatch(setDetailDashboardGradient(gradient));
+                }else if (Router.pathname==='/user/projects/[id]/gradients') {
+                    dispatch(updateDetailDashboardProjectGradientsData(gradient));
+                }else if (Router.pathname==='/user/collections/[id]/gradients') {
+                    dispatch(updateDetailDashboardCollectionGradients(gradient));
                 }
                 setLoading(null);
                 dispatch(closePopupGradient());
@@ -418,7 +436,7 @@ export default function PopupSaveGradient(){
     useLayoutEffect(()=>{
         if (dataShowSaveGradient.data) {
             const { name, description, tags, projects, collections } = dataShowSaveGradient.data;
-            setDataSave({ name: name ? name + (dataShowSaveGradient.action==='duplicate' ? ' Copy' : '') : '', description: description ? description : '', projects, collections, tags: tags ? tags : [] });
+            setDataSave({ name: name ? name + (dataShowSaveGradient.action==='duplicate' ? ' Copy' : '') : '', description: description ? description : '', projects: projects ? projects : [], collections: collections ? collections : [], tags: tags ? tags : [] });
         }
         if (dataShowSaveGradient.menu) {
             setActiveMenu(dataShowSaveGradient.menu);
@@ -432,7 +450,7 @@ export default function PopupSaveGradient(){
                     <svg onClick={()=>removeBox(100)} xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 absolute left-2 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-100 transition cursor-pointer p-1.5 rounded-lg" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
-                    <h1 className="font-semibold text-center">Save Gradient</h1>
+                    <h1 className="font-semibold text-center">{dataShowSaveGradient.action==='save' ? 'Save' : dataShowSaveGradient.action==='edit' ? 'Edit' : 'Duplicate'} Gradient</h1>
                 </div>
                 <div className="flex justify-center items-center text-[15px]">
                     <button onClick={()=>setActiveMenu('info')} className={`py-3.5 px-3 font-medium transition relative text-scondary ${activeMenu==='info' ? "before:content-[''] before:w-full before:left-0 before:top-full before:h-[2px] before:bg-blue-500 before:-translate-y-[2px] before:absolute text-blue-500" : 'hover:text-black' }`}>Info</button>

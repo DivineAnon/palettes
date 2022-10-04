@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetToken, usePushNotif } from "../lib";
-import { deleteDashboardColor } from "../slices/dashboardSlice";
+import { deleteDashboardColor, removeDetailDashboardCollectionColors, removeDetailDashboardProjectColorsData } from "../slices/dashboardSlice";
 import { selectIdDeleteColor, setDataDeleteColor } from "../slices/popupSlice";
 import ContainerPopup from "./ContainerPopup";
 import Spinner from "./Spinner";
@@ -25,10 +25,14 @@ export default function PopupDeleteColor(){
         const { id } = color.data;
         if (Router.pathname==='/user/colors') {
             dispatch(deleteDashboardColor(id));
+        }else if (Router.pathname==='/user/projects/[id]/colors') {
+            dispatch(removeDetailDashboardProjectColorsData(id));
+        }else if (Router.pathname==='/user/collections/[id]/colors') {
+            dispatch(removeDetailDashboardCollectionColors(id));
         }
         setLoading(false);
         dispatch(setDataDeleteColor(null));
-        handlePushNotif({ text: 'Palette deleted succesfully!', className: 'bg-black', icon: 'checklist' });
+        handlePushNotif({ text: 'Color deleted succesfully!', className: 'bg-black', icon: 'checklist' });
     }
     const removeBox = (time) => {
         elementRef.current.classList.remove('sm:animate-fadeIn');

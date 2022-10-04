@@ -141,7 +141,7 @@ export default function PaletteBox({ palettes }){
         return ()=> observer.unobserve(container.current);
     },[])
     return (
-        <div ref={container} className={`mt-[60px] md:mt-[100px] mb-[130px] rounded-xl overflow-hidden flex flex-wrap`}>
+        <div ref={container} className={`mt-[60px] md:mt-[100px] mb-[60px] md:mb-[160px] rounded-xl overflow-hidden flex flex-wrap`}>
             {palettes.map((hex,i)=>(
             <div onClick={(e)=>handleCopyHex(e,getCurrentFormat(currentFormat,hex),i)} key={i} style={{ backgroundColor: `#${hex}`, width, height }} className="cursor-pointer relative group flex items-center justify-center">
                 <div className="btn-view absolute top-0 right-0 w-max p-2 flex items-center">

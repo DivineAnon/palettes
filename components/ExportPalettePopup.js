@@ -33,6 +33,7 @@ export default function ExportPalettePopup(){
             dispatch(setDataExportPaletteAsImg(palettes,'exportPalette'));
         }
     }
+    console.log(palettes)
     return (
         <ContainerPopup remove={removeBox}>
             <div ref={exportRef} className="animate-translateY sm:animate-fadeIn bg-white w-full sm:w-[468px] sm:relative absolute bottom-0 rounded-tl-xl rounded-tr-xl sm:rounded-xl divide-y">

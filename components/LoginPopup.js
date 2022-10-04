@@ -35,7 +35,8 @@ export default function LoginPopup(){
                 const res = await axios.post(`${process.env.NEXT_PUBLIC_API}/api/auth/local`,dataLogin);
                 if (res.data) {
                     nookies.set(null,'token',res.data.jwt,{
-                        path: '/'
+                        path: '/',
+                        maxAge: 30 * 24 * 60 * 60,
                     });
                     const user = await Authorization();
                     dispatch(setUser(user));

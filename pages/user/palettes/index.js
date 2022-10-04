@@ -102,7 +102,7 @@ export default function PalettesDashboard(){
     }
     return (
         <DashboardTemplate>
-            <DashboardSearch title={'Palette'} fetchData={fetchPalettesSearch} handleRemoveSearch={handleRemoveSearch} handleChangeSearch={handleChangeSearch} query={query} filtersMenu={filtersMenu} handleSearch={handleSearch}/>
+            <DashboardSearch title={'Palettes'} fetchData={fetchPalettesSearch} handleRemoveSearch={handleRemoveSearch} handleChangeSearch={handleChangeSearch} query={query} filtersMenu={filtersMenu} handleSearch={handleSearch}/>
             {palettes?.data.length>0 || loadingFetchSearch ? (
                 loadingFetchSearch ? (
                     <div className="grid gap-x-9 mt-10 gap-y-5 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">

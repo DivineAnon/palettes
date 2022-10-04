@@ -6,20 +6,29 @@ export default function Footer(){
             <div className='mb-20 max-w-screen-2xl mx-auto grid text-center md:text-left gap-12 md:gap-0 md:grid-cols-4 pt-4'>
                 <div className='text-black'>
                     <h1 className='font-bold text-2xl mb-6'>Tools</h1>
-                    <Link href="/">
+                    <Link href="/generate">
                         <a className='text-black hover:text-blue-500 transition block mb-3'>Generate your palettes</a>
                     </Link>
-                    <Link href="/">
-                        <a className='text-black hover:text-blue-500 transition block'>Explore popular palettes</a>
+                    <Link href="/palettes/popular">
+                        <a className='text-black hover:text-blue-500 transition block mb-3'>Explore popular palettes</a>
+                    </Link>
+                    <Link href="/contrast-checker">
+                        <a className='text-black hover:text-blue-500 transition block'>Contrast checker</a>
                     </Link>
                 </div>
                 <div className='text-black'>
                     <h1 className='font-bold text-2xl mb-6'>Other</h1>
-                    <Link href="/">
+                    <Link href="/color-picker">
                         <a className='text-black hover:text-blue-500 transition block mb-3'>Color Picker</a>
                     </Link>
-                    <Link href="/">
-                        <a className='text-black hover:text-blue-500 transition block'>Create a gradient</a>
+                    <Link href="/gradient-palette">
+                        <a className='text-black hover:text-blue-500 transition block mb-3'>Make a gradient palette</a>
+                    </Link>
+                    <Link href="/gradient-maker">
+                        <a className='text-black hover:text-blue-500 transition block mb-3'>Create a gradient</a>
+                    </Link>
+                    <Link href="/gradients">
+                        <a className='text-black hover:text-blue-500 transition block'>Explore gradients</a>
                     </Link>
                 </div>
                 <div className='text-black'>
@@ -31,7 +40,7 @@ export default function Footer(){
                 <div className='text-black'>
                     <h1 className='font-bold text-2xl mb-6'>Company</h1>
                     <Link href="/">
-                        <a className='text-black hover:text-blue-500 transition block'>Pricing</a>
+                        <a className='text-black hover:text-blue-500 transition block mb-3'>Pricing</a>
                     </Link>
                     <Link href="/">
                         <a className='text-black hover:text-blue-500 transition block'>Contact</a>

@@ -93,11 +93,11 @@ export default function PaletteEdit(){
         }
     }
     return (
-        <Layout title={`My new palette - Palettes`}>
+        <Layout title={`${data.name} - Palettes`}>
             <Header/>
-            <div className="mt-[170px] px-6 md:px-10 max-w-screen-2xl mx-auto">
+            <div className="mt-[60px] md:mt-[160px] px-6 md:px-10 max-w-screen-2xl mx-auto">
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-                    <h1 className="text-5xl font-black tracking-tighter">{data?.name}</h1>
+                    <h1 className="text-5xl font-black tracking-tighter text-center">{data?.name}</h1>
                     <div className="flex group">
                         <div onClick={()=>dispatch(setDataExportPalette(palette))} className="flex items-center font-semibold gap-2 border border-r-0 border-gray-300 hover:border-gray-400 transition px-4 py-2.5 rounded-tl-xl rounded-bl-xl cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
