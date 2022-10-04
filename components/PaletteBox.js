@@ -139,6 +139,7 @@ export default function PaletteBox({ palettes }){
         });
         observer.observe(container.current);
         return ()=> observer.unobserve(container.current);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
     return (
         <div ref={container} className={`mt-[60px] md:mt-[100px] mb-[60px] md:mb-[160px] rounded-xl overflow-hidden flex flex-wrap`}>

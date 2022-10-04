@@ -7,7 +7,7 @@ import { selectDetailDashboardCollection, selectDetailDashboardCollectionGradien
 import { setDataPopupCollection, setIdDeleteCollection } from "../../../../slices/popupSlice";
 import { wrapper } from "../../../../store";
 
-export default function collectionGradients(){
+export default function CollectionGradients(){
     const collection = useSelector(selectDetailDashboardCollection);
     const gradients = useSelector(selectDetailDashboardCollectionGradients);
     const dispatch = useDispatch();

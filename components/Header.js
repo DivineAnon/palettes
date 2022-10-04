@@ -34,6 +34,7 @@ export default function Header({ isFixed }){
     }
     useEffect(()=>{
         Router.events.on('routeChangeStart',removeMenuLeft);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
     return (
         <>

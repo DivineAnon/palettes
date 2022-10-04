@@ -51,6 +51,7 @@ export default function DashboardSearch({ handleSearch, filtersMenu: Menu, title
         }
         window.addEventListener('click',clickEvent);
         return () => window.removeEventListener('click',clickEvent);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[activeMenu,query])
     useEffect(()=>{
         if (!isMd) {
