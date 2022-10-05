@@ -1,7 +1,19 @@
-import { Avatar, Footer, Header, Layout, PaletteSaves } from '../../components';
+import { Avatar, Footer, Header, Layout, PaletteSaves, Spinner } from '../../components';
 import axios from 'axios';
+import { useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useRouter } from 'next/router';
 
 export default function Profile({ profile }){
+    const [palettes, setPalettes] = useState(profile.saves_palette);
+    const [loadingFetch, setLoadingFetch] = useState(false);
+    const { username } = useRouter().query;
+    const loadData = async () => {
+        setLoadingFetch(true);
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/saves-palettes/profile/${username}?page=${parseInt(palettes.meta.pagination.page)+1}`);
+        setPalettes({ data: [...palettes.data,...data.data], meta: data.meta });
+        setLoadingFetch(false);
+    }
     return (
         <Layout title={`${profile.fullname} - Palettes`}>
             <Header/>
@@ -29,15 +41,27 @@ export default function Profile({ profile }){
                     )}
                 </div>
                 <div className='max-w-screen-xl mt-[60px] md:mt-[120px] mb-[60px] md:mb-[100px] mx-auto px-6 md:px-12 xl:px-20'>
-                    {profile?.saves_palette.length>0 ? (
-                    <div className='grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-x-8 gap-y-7'>
-                        {profile?.saves_palette.map((obj,i)=>(
-                        <PaletteSaves key={i} index={i} data={obj}/>
-                        ))}
-                    </div>
+                    {palettes.data.length>0 ? (
+                    <InfiniteScroll
+                        dataLength={palettes.data.length}
+                        hasMore={true}
+                        next={loadData}
+                        scrollThreshold={.75}
+                    >
+                        <div className='grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-x-8 gap-y-7'>
+                            {palettes.data.map((obj,i)=>(
+                            <PaletteSaves key={i} index={i} data={obj}/>
+                            ))}
+                        </div>
+                    </InfiniteScroll>
                     ) : (
                     <div className='p-[100px] bg-[#f7f7f8] text-scondary rounded-xl'>
                         <p className='text-center text-xl font-medium'>No palettes yet.</p>
+                    </div>
+                    )}
+                    {loadingFetch && (
+                    <div className='my-[100px]'>
+                        <Spinner w={11} h={11}/>
                     </div>
                     )}
                 </div>
