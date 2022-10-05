@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { setDataMenuMore } from "../slices/popupSlice";
 import { useIsMd } from './../lib';
 
-export default function PCSearchTemplate({ name, title, menuMore, filtersMenu }){
+export default function PCSearchTemplate({ name, title, menuMore, filtersMenu: Menu }){
     const isMd = useIsMd();
     const [showSearchMD,setShowSearchMD] = useState(false);
     const dispatch = useDispatch();
