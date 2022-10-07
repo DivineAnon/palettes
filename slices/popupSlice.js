@@ -34,6 +34,7 @@ const initialState = {
     dataMenuMore: null,
     dataNotif: [],
     dataPaletteDetail: null,
+    dataAddToFav: null
 }
 
 export const popupSlice = createSlice({
@@ -445,6 +446,9 @@ export const popupSlice = createSlice({
         },
         setDataPaletteDetail: (state,action) => {
             state.dataPaletteDetail = action.payload;
+        },
+        setDataAddToFav: (state,action) => {
+            state.dataAddToFav = action.payload;
         }
     },
 })
@@ -500,7 +504,8 @@ export const {
     pushNotif,
     removeNotif,
     setDataPaletteDetail,
-    setDataPopupCollection
+    setDataPopupCollection,
+    setDataAddToFav
  } = popupSlice.actions;
 
 // selectors
@@ -533,5 +538,6 @@ export const selectDataFullscreenPalette = (state) => state.popup.dataFullscreen
 export const selectDataMenuMore = (state) => state.popup.dataMenuMore;
 export const selectALlNotif = (state) => state.popup.dataNotif;
 export const selectDataDetailPalette = (state) => state.popup.dataPaletteDetail;
+export const selectDataAddToFav = (state) => state.popup.dataAddToFav;
 
 export default popupSlice.reducer;

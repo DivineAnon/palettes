@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { selectDataCodePopup, selectDataDeleteCollection, selectDataDeleteColor, selectDataDeleteGradient, selectDataDeleteProject, selectDataDetailPalette, selectDataExportPalette, selectDataExportPaletteAsImg, selectDataFullscreenPalette, selectDataMenuMore, selectDataPopupCollection, selectDataPopupGradient, selectDataPopupLuminance, selectDataPopupProject, selectDataPopupViewGradient, selectDataQuickView, selectDataShowCSSGradient, selectDataShowGenerateMethod, selectDataShowSettingPalette, selectDataShowUploadImage, selectDataSingleQuickView, selectDeletePalette, selectLoginRes, selectSaveColor, selectSavePalette } from "../slices/popupSlice";
+import { selectDataAddToFav, selectDataCodePopup, selectDataDeleteCollection, selectDataDeleteColor, selectDataDeleteGradient, selectDataDeleteProject, selectDataDetailPalette, selectDataExportPalette, selectDataExportPaletteAsImg, selectDataFullscreenPalette, selectDataMenuMore, selectDataPopupCollection, selectDataPopupGradient, selectDataPopupLuminance, selectDataPopupProject, selectDataPopupViewGradient, selectDataQuickView, selectDataShowCSSGradient, selectDataShowGenerateMethod, selectDataShowSettingPalette, selectDataShowUploadImage, selectDataSingleQuickView, selectDeletePalette, selectLoginRes, selectSaveColor, selectSavePalette } from "../slices/popupSlice";
 import CodePopup from "./CodePopup";
 import ExportPaletteAsImg from "./ExportPaletteAsImg";
 import ExportPalettePopup from "./ExportPalettePopup";
@@ -10,6 +10,7 @@ import LoginPopup from "./LoginPopup";
 import LoginRes from "./LoginRes";
 import LuminancePopup from "./LuminancePopup";
 import MenuRelative from "./MenuRelative";
+import PopupAddToFav from "./PopupAddToFav";
 import PopupCreateCollection from "./PopupCreateCollection";
 import PopupCreateProject from "./PopupCreateProject";
 import PopupCSSGradient from "./PopupCSSGradient";
@@ -55,6 +56,7 @@ export default function PopUp(){
     const dataFullscreenPalette = useSelector(selectDataFullscreenPalette);
     const dataMenuMore = useSelector(selectDataMenuMore);
     const dataDetailPalette = useSelector(selectDataDetailPalette);
+    const dataAddToFav = useSelector(selectDataAddToFav);
     return (
         <>
          {loginRes.provider && (
@@ -140,6 +142,9 @@ export default function PopUp(){
          )}
          {dataDetailPalette && (
             <PopupPaletteDetail/>
+         )}
+         {dataAddToFav && (
+            <PopupAddToFav/>
          )}
         </>
     )

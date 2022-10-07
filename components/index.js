@@ -41,3 +41,4 @@ export { default as PaletteBox } from './PaletteBox';
 export { default as DashboardLoadingSearch } from './DashboardLoadingSearch';
 export { default as PCTemplate } from './PCTemplate';
 export { default as PCSearchTemplate } from './PCSearchTemplate';
+export { default as NavFavorites } from './NavFavorites';

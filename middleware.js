@@ -27,5 +27,7 @@ export function middleware(req){
         }else {
             return NextResponse.rewrite(new URL('/404', req.url))
         }
+    }else if (req.nextUrl.pathname==='/user/favorites') {
+        return  NextResponse.redirect(new URL(`/user/favorites/palettes`, req.url));
     }
 }

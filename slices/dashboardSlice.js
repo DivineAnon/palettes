@@ -62,6 +62,48 @@ const initialState = {
             gradients: null,
             colors: null
         }
+    },
+    favorites: {
+        palettes: {
+            data: [],
+            meta: {
+                pagination: {
+                    page: 1
+                }
+            },
+        },
+        colors: {
+            data: [],
+            meta: {
+                pagination: {
+                    page: 1
+                }
+            }
+        },
+        gradients: {
+            data: [],
+            meta: {
+                pagination: {
+                    page: 1
+                }
+            }
+        },
+        projects: {
+            data: [],
+            meta: {
+                pagination: {
+                    page: 1
+                }
+            }
+        },
+        collections: {
+            data: [],
+            meta: {
+                pagination: {
+                    page: 1
+                }
+            }
+        },
     }
 }
 
@@ -299,6 +341,21 @@ export const dashboardSlice = createSlice({
         setDetailDashboardCollectionGradients: (state,action) => {
             state.collections.detail.gradients = action.payload;
         },
+        setFavoritePalettes: (state,action) => {
+            state.favorites.palettes = action.payload;
+        },
+        setFavoriteColors: (state,action) => {
+            state.favorites.colors = action.payload;
+        },
+        setFavoriteGradients: (state,action) => {
+            state.favorites.gradients = action.payload;
+        },
+        setFavoriteProjects: (state,action) => {
+            state.favorites.projects = action.payload;
+        },
+        setFavoriteCollections: (state,action) => {
+            state.favorites.collections = action.payload;
+        },
     },
     extraReducers(builder) {
         builder
@@ -414,6 +471,11 @@ export const {
     removeDetailDashboardCollectionGradients,
     updateDetailDashboardCollectionGradients,
     updateDetailDashboardCollectionPalettes,
+    setFavoritePalettes,
+    setFavoriteColors,
+    setFavoriteGradients,
+    setFavoriteProjects,
+    setFavoriteCollections,
  } = dashboardSlice.actions;
 
 export const selectDashboardPalettes = (state) => state.dashboard.palettes;
@@ -447,5 +509,11 @@ export const selectDetailDashboardCollection = (state) => state.dashboard.collec
 export const selectDetailDashboardCollectionPalettes = (state) => state.dashboard.collections.detail.palettes;
 export const selectDetailDashboardCollectionColors = (state) => state.dashboard.collections.detail.colors;
 export const selectDetailDashboardCollectionGradients = (state) => state.dashboard.collections.detail.gradients;
+
+export const selectFavoritePalettes = (state) => state.dashboard.favorites.palettes;
+export const selectFavoriteColors = (state) => state.dashboard.favorites.colors;
+export const selectFavoriteGradients = (state) => state.dashboard.favorites.gradients;
+export const selectFavoriteProjects = (state) => state.dashboard.favorites.projects;
+export const selectFavoriteCollections = (state) => state.dashboard.favorites.collections;
 
 export default dashboardSlice.reducer;

@@ -35,7 +35,6 @@ export default function ColorsDashboard(){
     }
     const handleAddQuery = (q) => {
         const filteredSearch = query.filter(data=>data.type!=='search');
-        console.log(q.type)
         if (q.type==='color') {
             setQuery(filteredSearch.filter(data=>data.type!=='color'));
             setQuery(query=>filteredSearch.map(data=>data.data.value).includes(q.data.value) ? [...query.filter(q=>q.type==='search'),...filteredSearch.filter(data=>data.data.value!==q.data.value)] : [...query,q]);

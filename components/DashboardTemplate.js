@@ -71,7 +71,7 @@ export default function DashboardTemplate({ children }){
         <Layout title={'Dashboard - Palettes'}>
             <Header isFixed={true}/>
             <div className="fixed hidden md:flex flex-col left-0 w-[220px] lg:w-[250px] border-r h-[calc(100%-60px)]">
-                <div className="p-5 flex-1">
+                <div className="p-5 flex-1 overflow-auto">
                     <Link href={'/user/palettes'}>
                         <a className={`flex items-center gap-3 py-2.5 px-3 rounded-lg mb-2.5 ${Router.asPath==='/user/palettes' ? 'bg-gray-200/80 font-semibold' : 'hover:bg-gray-100 transition'}`}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -114,7 +114,7 @@ export default function DashboardTemplate({ children }){
                         </a>
                     </Link>
                     <Link href={'/user/favorites'}>
-                        <a className={`flex items-center gap-3 py-2.5 px-3 rounded-lg ${Router.asPath==='/user/favorites' ? 'bg-gray-200/80 font-semibold' : 'hover:bg-gray-100 transition'}`}>
+                        <a className={`flex items-center gap-3 py-2.5 px-3 rounded-lg mb-2.5 ${Router.pathname.split('/').splice(0,3).join('/')==='/user/favorites' ? 'bg-gray-200/80 font-semibold' : 'hover:bg-gray-100 transition'}`}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                             </svg>
