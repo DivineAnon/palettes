@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useRef, useState, Fragment, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getColorGroup, GetToken, lightOrDark, usePushNotif,  } from "../lib";
-import { addDashboardColor, addDetailDashboardCollectionColors, addDetailDashboardProjectColorsData, setDetailDashboardColor, updateDashboardColor, updateDetailDashboardCollectionColors, updateDetailDashboardProjectColorsData } from "../slices/dashboardSlice";
+import { addDashboardColor, addDetailDashboardCollectionColors, addDetailDashboardProjectColorsData, setDetailDashboardColor, updateDashboardColor, updateDetailDashboardCollectionColors, updateDetailDashboardProjectColorsData, updateFavoriteData } from "../slices/dashboardSlice";
 import { selectSaveColor, setSaveColor } from "../slices/popupSlice";
 import { addUserCollection, addUserProject, selectUser } from "../slices/userSlice";
 import ColorPickerRelative from "./ColorPickerRelative";
@@ -153,6 +153,8 @@ export default function PopupSaveColor(){
                     dispatch(updateDetailDashboardProjectColorsData(update.data));
                 }else if (Router.pathname==='/user/collections/[id]/colors') {
                     dispatch(updateDetailDashboardCollectionColors(update.data));
+                }else if (Router.pathname==='/user/favorites/colors') {
+                    dispatch(updateFavoriteData({ data: update.data, type: 'colors' }));
                 }
                 setLoading(null);
                 dispatch(setSaveColor(null));

@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetToken, usePushNotif } from "../lib";
-import { deleteDashboardPalette, removeDetailDashboardCollectionPalettes, removeDetailDashboardProjectPalettesData } from "../slices/dashboardSlice";
+import { deleteDashboardPalette, removeDetailDashboardCollectionPalettes, removeDetailDashboardProjectPalettesData, removeFromFavorite } from "../slices/dashboardSlice";
 import { selectIdDeletePalette, setDeletePalette } from "../slices/popupSlice";
 import { deletePaletteLibrary } from "../slices/sidebarSlice";
 import ContainerPopup from "./ContainerPopup";
@@ -32,6 +32,8 @@ export default function PopupDeletePalette(){
             dispatch(removeDetailDashboardProjectPalettesData(id));
         }else if (Router.pathname==='/user/collections/[id]/palettes') {
             dispatch(removeDetailDashboardCollectionPalettes(id));
+        }else if (Router.pathname==='/user/favorites/palettes') {
+            dispatch(removeFromFavorite({ id, type: 'palettes' }));
         }
         setLoading(false);
         dispatch(setDeletePalette(null));

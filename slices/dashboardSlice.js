@@ -359,6 +359,11 @@ export const dashboardSlice = createSlice({
         removeFromFavorite: (state,action) => {
             const { id, type } = action.payload;
             state.favorites[type].data = state.favorites[type].data.filter(data=>data.id!==id);
+        },
+        updateFavoriteData: (state,action) => {
+            const { data, type } = action.payload;
+            const index = state.favorites[type].data.findIndex(obj=>obj.id===data.id);
+            state.favorites[type].data[index] = data;
         }
     },
     extraReducers(builder) {
@@ -480,7 +485,8 @@ export const {
     setFavoriteGradients,
     setFavoriteProjects,
     setFavoriteCollections,
-    removeFromFavorite
+    removeFromFavorite,
+    updateFavoriteData
  } = dashboardSlice.actions;
 
 export const selectDashboardPalettes = (state) => state.dashboard.palettes;

@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetToken, usePushNotif,  } from "../lib";
-import { deleteDashboardProject } from "../slices/dashboardSlice";
+import { deleteDashboardProject, removeFromFavorite } from "../slices/dashboardSlice";
 import { selectDataDeleteProject, setDataDeleteProject } from "../slices/popupSlice";
 import { deleteUserProject } from "../slices/userSlice";
 import ContainerPopup from "./ContainerPopup";
@@ -27,6 +27,8 @@ export default function PopupDeleteProject(){
         dispatch(deleteUserProject(id));
         if (Router.pathname==='/user/projects') {
             dispatch(deleteDashboardProject(id));
+        }else if (Router.pathname==='/user/favorites/projects') {
+            dispatch(removeFromFavorite({ id, type: 'projects' }));
         }
         setLoading(false);
         dispatch(setDataDeleteProject(null));

@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetToken, usePushNotif } from "../lib";
-import { deleteDashboardColor, removeDetailDashboardCollectionColors, removeDetailDashboardProjectColorsData } from "../slices/dashboardSlice";
+import { deleteDashboardColor, removeDetailDashboardCollectionColors, removeDetailDashboardProjectColorsData, removeFromFavorite } from "../slices/dashboardSlice";
 import { selectIdDeleteColor, setDataDeleteColor } from "../slices/popupSlice";
 import ContainerPopup from "./ContainerPopup";
 import Spinner from "./Spinner";
@@ -29,6 +29,8 @@ export default function PopupDeleteColor(){
             dispatch(removeDetailDashboardProjectColorsData(id));
         }else if (Router.pathname==='/user/collections/[id]/colors') {
             dispatch(removeDetailDashboardCollectionColors(id));
+        }else if (Router.pathname==='/user/favorites/colors') {
+            dispatch(removeFromFavorite({ id, type: 'colors' }));
         }
         setLoading(false);
         dispatch(setDataDeleteColor(null));

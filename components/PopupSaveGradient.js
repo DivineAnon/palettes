@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useRef, useState, Fragment, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { dataCreateGradient, GetToken, usePushNotif,  } from "../lib";
-import { addDashboardGradient, addDetailDashboardCollectionGradients, addDetailDashboardProjectGradientsData, setDetailDashboardGradient, updateDashboardGradient, updateDetailDashboardCollectionGradients, updateDetailDashboardProjectGradientsData } from "../slices/dashboardSlice";
+import { addDashboardGradient, addDetailDashboardCollectionGradients, addDetailDashboardProjectGradientsData, setDetailDashboardGradient, updateDashboardGradient, updateDetailDashboardCollectionGradients, updateDetailDashboardProjectGradientsData, updateFavoriteData } from "../slices/dashboardSlice";
 import { updateLikeGradient } from "../slices/gradientsSlice";
 import { closePopupGradient, selectDataPopupGradient, setDataMenuMore } from "../slices/popupSlice";
 import { addUserCollection, addUserProject, selectUser } from "../slices/userSlice";
@@ -174,6 +174,8 @@ export default function PopupSaveGradient(){
                     dispatch(updateDetailDashboardProjectGradientsData(gradient));
                 }else if (Router.pathname==='/user/collections/[id]/gradients') {
                     dispatch(updateDetailDashboardCollectionGradients(gradient));
+                }else if (Router.pathname==='/user/favorites/gradients') {
+                    dispatch(updateFavoriteData({ data: gradient, type: 'gradients' }));
                 }
                 setLoading(null);
                 dispatch(closePopupGradient());

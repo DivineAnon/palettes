@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetToken, usePushNotif,  } from "../lib";
-import { deleteDashboardCollection } from "../slices/dashboardSlice";
+import { deleteDashboardCollection, removeFromFavorite } from "../slices/dashboardSlice";
 import { selectDataDeleteCollection, setDataDeleteCollection } from "../slices/popupSlice";
 import { deleteUserCollection } from "../slices/userSlice";
 import ContainerPopup from "./ContainerPopup";
@@ -27,6 +27,8 @@ export default function PopupDeleteCollection(){
         dispatch(deleteUserCollection(id));
         if (Router.pathname==='/user/collections') {
             dispatch(deleteDashboardCollection(id));
+        }else if (Router.pathname==='/user/favorites/collections') {
+            dispatch(removeFromFavorite({ id, type: 'collections' }));
         }
         setLoading(false);
         dispatch(setDataDeleteCollection(null));

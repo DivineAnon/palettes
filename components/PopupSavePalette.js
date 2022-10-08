@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useState, useRef, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { dataCreatePalette, GetToken, lightOrDark, usePushNotif } from "../lib";
-import { addDashboardPalette, addDetailDashboardCollectionPalettes, addDetailDashboardProjectPalettesData, setDetailDashboardPalette, updateDashboardPalette, updateDetailDashboardCollectionPalettes, updateDetailDashboardProjectPalettesData } from "../slices/dashboardSlice";
+import { addDashboardPalette, addDetailDashboardCollectionPalettes, addDetailDashboardProjectPalettesData, setDetailDashboardPalette, updateDashboardPalette, updateDetailDashboardCollectionPalettes, updateDetailDashboardProjectPalettesData, updateFavoriteData } from "../slices/dashboardSlice";
 import { updateLikePalette } from "../slices/palettesSlice";
 import { selectSavePalette, setSavePalette } from "../slices/popupSlice";
 import { addNewPaletteLibrary, updatePaletteLibrary } from "../slices/sidebarSlice";
@@ -207,6 +207,8 @@ export default function PopupSavePalette(){
                     dispatch(updateDetailDashboardProjectPalettesData(saves));
                 }else if (Router.pathname==='/user/collections/[id]/palettes') {
                     dispatch(updateDetailDashboardCollectionPalettes(saves));
+                }else if (Router.pathname==='/user/favorites/palettes') {
+                    dispatch(updateFavoriteData({ data: saves, type: 'palettes' }));
                 }
                 setLoading(null);
                 dispatch(setSavePalette(null));

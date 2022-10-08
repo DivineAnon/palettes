@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useRef , useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetToken, usePushNotif,  } from "../lib";
-import { addDashboardProject, setDetailDashboardProject, updateDashboardProject } from "../slices/dashboardSlice";
+import { addDashboardProject, setDetailDashboardProject, updateDashboardProject, updateFavoriteData } from "../slices/dashboardSlice";
 import { closePopupProject, selectDataPopupProject } from "../slices/popupSlice";
 import { addUserProject, selectUser, updateUserProject } from "../slices/userSlice";
 import ContainerPopup from "./ContainerPopup";
@@ -41,6 +41,8 @@ export default function PopupCreateProject(){
                     dispatch(updateDashboardProject(project));
                 }else if (Router.pathname.split('/').slice(0,4).join('/')==='/user/projects/[id]') {
                     dispatch(setDetailDashboardProject(project));
+                }else if (Router.pathname==='/user/favorites/projects') {
+                    dispatch(updateFavoriteData({ data: project, type: 'projects' }));
                 }
                 setLoading(false);
                 dispatch(closePopupProject())
