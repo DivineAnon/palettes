@@ -356,6 +356,10 @@ export const dashboardSlice = createSlice({
         setFavoriteCollections: (state,action) => {
             state.favorites.collections = action.payload;
         },
+        removeFromFavorite: (state,action) => {
+            const { id, type } = action.payload;
+            state.favorites[type].data = state.favorites[type].data.filter(data=>data.id!==id);
+        }
     },
     extraReducers(builder) {
         builder
@@ -476,6 +480,7 @@ export const {
     setFavoriteGradients,
     setFavoriteProjects,
     setFavoriteCollections,
+    removeFromFavorite
  } = dashboardSlice.actions;
 
 export const selectDashboardPalettes = (state) => state.dashboard.palettes;

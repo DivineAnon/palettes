@@ -34,7 +34,8 @@ const initialState = {
     dataMenuMore: null,
     dataNotif: [],
     dataPaletteDetail: null,
-    dataAddToFav: null
+    dataAddToFav: null,
+    dataDelFromFav: null
 }
 
 export const popupSlice = createSlice({
@@ -449,7 +450,10 @@ export const popupSlice = createSlice({
         },
         setDataAddToFav: (state,action) => {
             state.dataAddToFav = action.payload;
-        }
+        },
+        setDataDelFromFav: (state,action) => {
+            state.dataDelFromFav = action.payload;
+        },
     },
 })
 
@@ -505,7 +509,8 @@ export const {
     removeNotif,
     setDataPaletteDetail,
     setDataPopupCollection,
-    setDataAddToFav
+    setDataAddToFav,
+    setDataDelFromFav
  } = popupSlice.actions;
 
 // selectors
@@ -539,5 +544,6 @@ export const selectDataMenuMore = (state) => state.popup.dataMenuMore;
 export const selectALlNotif = (state) => state.popup.dataNotif;
 export const selectDataDetailPalette = (state) => state.popup.dataPaletteDetail;
 export const selectDataAddToFav = (state) => state.popup.dataAddToFav;
+export const selectDataDeleteFromFav = (state) => state.popup.dataDelFromFav;
 
 export default popupSlice.reducer;

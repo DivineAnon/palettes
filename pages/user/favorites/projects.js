@@ -101,7 +101,7 @@ export default function FavProjects(){
                 >
                     <div className="grid gap-x-9 mt-10 gap-y-5 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
                         {projects.data.map(project=>(
-                            <ProjectSaves key={project.id} data={project}/>
+                            <ProjectSaves key={project.id} data={project} fav={true}/>
                         ))}
                     </div>
                 </InfiniteScroll>

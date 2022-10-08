@@ -101,7 +101,7 @@ export default function FavPalettes(){
                 >
                     <div className="grid gap-x-9 mt-10 gap-y-5 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
                         {palettes.data.map((palette,i)=>(
-                            <PaletteDashboard data={palette} key={i}/>
+                            <PaletteDashboard data={palette} key={i} fav={true}/>
                         ))}
                     </div>
                 </InfiniteScroll>

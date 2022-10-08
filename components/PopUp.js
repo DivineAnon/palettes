@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { selectDataAddToFav, selectDataCodePopup, selectDataDeleteCollection, selectDataDeleteColor, selectDataDeleteGradient, selectDataDeleteProject, selectDataDetailPalette, selectDataExportPalette, selectDataExportPaletteAsImg, selectDataFullscreenPalette, selectDataMenuMore, selectDataPopupCollection, selectDataPopupGradient, selectDataPopupLuminance, selectDataPopupProject, selectDataPopupViewGradient, selectDataQuickView, selectDataShowCSSGradient, selectDataShowGenerateMethod, selectDataShowSettingPalette, selectDataShowUploadImage, selectDataSingleQuickView, selectDeletePalette, selectLoginRes, selectSaveColor, selectSavePalette } from "../slices/popupSlice";
+import { selectDataAddToFav, selectDataCodePopup, selectDataDeleteCollection, selectDataDeleteColor, selectDataDeleteFromFav, selectDataDeleteGradient, selectDataDeleteProject, selectDataDetailPalette, selectDataExportPalette, selectDataExportPaletteAsImg, selectDataFullscreenPalette, selectDataMenuMore, selectDataPopupCollection, selectDataPopupGradient, selectDataPopupLuminance, selectDataPopupProject, selectDataPopupViewGradient, selectDataQuickView, selectDataShowCSSGradient, selectDataShowGenerateMethod, selectDataShowSettingPalette, selectDataShowUploadImage, selectDataSingleQuickView, selectDeletePalette, selectLoginRes, selectSaveColor, selectSavePalette } from "../slices/popupSlice";
 import CodePopup from "./CodePopup";
 import ExportPaletteAsImg from "./ExportPaletteAsImg";
 import ExportPalettePopup from "./ExportPalettePopup";
@@ -16,6 +16,7 @@ import PopupCreateProject from "./PopupCreateProject";
 import PopupCSSGradient from "./PopupCSSGradient";
 import PopupDeleteCollection from "./PopupDeleteCollection";
 import PopupDeleteColor from "./PopupDeleteColor";
+import PopupDeleteFromFav from "./PopupDeleteFromFav";
 import PopupDeleteGradient from "./PopupDeleteGradient";
 import PopupDeletePalette from "./PopupDeletePalette";
 import PopupDeleteProject from "./PopupDeleteProject";
@@ -57,6 +58,7 @@ export default function PopUp(){
     const dataMenuMore = useSelector(selectDataMenuMore);
     const dataDetailPalette = useSelector(selectDataDetailPalette);
     const dataAddToFav = useSelector(selectDataAddToFav);
+    const dataDelFromFav = useSelector(selectDataDeleteFromFav);
     return (
         <>
          {loginRes.provider && (
@@ -145,6 +147,9 @@ export default function PopUp(){
          )}
          {dataAddToFav && (
             <PopupAddToFav/>
+         )}
+         {dataDelFromFav && (
+            <PopupDeleteFromFav/>
          )}
         </>
     )

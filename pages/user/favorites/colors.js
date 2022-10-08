@@ -101,7 +101,7 @@ export default function FavColors(){
                 >
                     <div className="grid gap-x-9 mt-10 gap-y-5 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
                         {colors.data.map((data)=>(
-                            <PaletteColorSaves data={data} key={data.id}/>
+                            <PaletteColorSaves data={data} key={data.id} fav={true}/>
                         ))}
                     </div>
                 </InfiniteScroll>

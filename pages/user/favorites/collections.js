@@ -101,7 +101,7 @@ export default function FavCollections(){
                 >
                     <div className="grid gap-x-9 mt-10 gap-y-5 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
                         {collections.data.map(collection=>(
-                            <CollectionSaves data={collection} key={collection.id}/>
+                            <CollectionSaves data={collection} key={collection.id} fav={true}/>
                         ))}
                     </div>
                 </InfiniteScroll>
