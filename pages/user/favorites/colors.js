@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useState } from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { DashboardLoading, DashboardLoadingSearch, DashboardSearch, DashboardTemplate, NavFavorites, PaletteColorSaves } from "../../../components"
 import { colorsGroup, GetToken, stylesPalette } from "../../../lib"
 import { selectFavoriteColors, setFavoriteColors } from "../../../slices/dashboardSlice"
@@ -9,6 +9,7 @@ import { wrapper } from "../../../store"
 
 export default function FavColors(){
     const colors = useSelector(selectFavoriteColors);
+    const dispatch = useDispatch();
     const [query,setQuery] = useState([]);
     const [loadingFetchSearch,setLoadingFetchSearch] = useState(false);
     const [loadingFetch,setLoadingFetch] = useState(false);
@@ -17,31 +18,46 @@ export default function FavColors(){
         if (e.target[0].value) {
             setQuery(query=>query.filter(data=>data.type!=='search'));
             setQuery(query=>[...query,{ type: 'search', value: e.target[0].value }]);
-            fetchPalettesSearch(query);
+            fetchColorsSearch(query);
         }
+    }
+    const getQuery = (query,page) => {
+        const style = stylesPalette.filter(data=>query.filter(data=>data.type==='style').map(q=>q.data.value).includes(data.value));
+        const color = query.filter(data=>data.type==='color');
+        const search = query.find(query=>query.type==='search');
+        const queryList = [`page=${page}`];
+        if (style.length>0) {
+            queryList.push(`style=${style.map(data=>data.value).join(',')}`);
+        }
+        if (color.length>0) {
+            queryList.push(`color=${color.map(data=>data.data.value).join(',')}`);
+        }
+        if (search) {
+            queryList.push(`search=${search.value}`);
+        }
+        return queryList.join('&');
     }
     const handleRemoveSearch = () => {
         const newQuery = query.filter(data=>data.type!=='search');
         setQuery(newQuery);
-        fetchPalettesSearch(newQuery);
+        fetchColorsSearch(newQuery);
     }
-    const fetchPalettesSearch = async (query) => {
-        // setLoadingFetchSearch(true);
-        // const palettes = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/saves-palettes/feed?${getQuery(query,1)
-        // }`,{
-        //     headers: {
-        //         Authorization: `bearer ${GetToken()}`
-        //     }
-        // })
-        // setLoadingFetchSearch(false);
-        // dispatch(setDashboardPalettes(palettes.data));
+    const fetchColorsSearch = async (query) => {
+        setLoadingFetchSearch(true);
+        const colors = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/favorites/colors?${getQuery(query,1)}`,{
+            headers: {
+                Authorization: `bearer ${GetToken()}`
+            }
+        })
+        setLoadingFetchSearch(false);
+        dispatch(setFavoriteColors(colors.data));
     }
     const handleChangeSearch = (e) => {
         setQuery(query=>query.filter(data=>data.type!=='search'));
         if (e.target.value) {
             setQuery(query=>[...query,{ type: 'search', value: e.target.value }]);
         }else {
-            fetchPalettesSearch(query.filter(data=>data.type!=='search'));
+            fetchColorsSearch(query.filter(data=>data.type!=='search'));
         }
     }
     const filtersMenu = () => (
@@ -49,27 +65,19 @@ export default function FavColors(){
             <div className="mb-5">
                 <h1 className="text-sm font-semibold mb-3.5">Style</h1>
                 <div className="flex flex-wrap gap-2">
-                    {stylesPalette.filter(data=>!data.value.includes('Colors')).map((data,i)=>(
-                        <div key={i} onClick={()=>handleAddQuery({ data, type: 'styles' })} className={`h-8 px-3 rounded-lg border text-sm font-medium flex items-center transition cursor-pointer ${query.filter(q=>q.type==='styles').map(q=>q.data.value).includes(data.value) ? 'border-blue-500 bg-blue-50' : 'hover:border-gray-400'}`}>{data.value}</div>
-                    ))}
-                </div>
-            </div>
-            <div className="mb-5">
-                <h1 className="text-sm font-semibold mb-3.5">Color</h1>
-                <div className="flex flex-wrap gap-2">
-                    {colorsGroup.map((data,i)=>(
-                        <div key={i} onClick={()=>handleAddQuery({ data, type: 'colors' })} className={`h-8 px-3 rounded-lg border text-sm font-medium flex items-center transition cursor-pointer gap-2 ${query.filter(q=>q.type==='colors').map(q=>q.data.value).includes(data.value) ? 'border-blue-500 bg-blue-50' : 'hover:border-gray-400'}`}>
-                            <div style={{ backgroundColor: data.hex }} className={`w-3 h-3 rounded-full ${data.value==='White' && 'border'}`}></div>
-                            <span>{data.value}</span>
-                        </div>
+                    {stylesPalette.filter(data=>!data.value.includes('Colors') && data.value!=='Gradient').map((data,i)=>(
+                        <div key={i} onClick={()=>handleAddQuery({ data, type: 'style' })} className={`h-8 px-3 rounded-lg border text-sm font-medium flex items-center transition cursor-pointer ${query.filter(q=>q.type==='style').map(q=>q.data.value).includes(data.value) ? 'border-blue-500 bg-blue-50' : 'hover:border-gray-400'}`}>{data.value}</div>
                     ))}
                 </div>
             </div>
             <div>
-                <h1 className="text-sm font-semibold mb-3.5">Number of colors</h1>
+                <h1 className="text-sm font-semibold mb-3.5">Color</h1>
                 <div className="flex flex-wrap gap-2">
-                    {stylesPalette.filter(data=>data.value.includes('Colors')).map((data,i)=>(
-                        <div key={i} onClick={()=>handleAddQuery({ data, type: 'styles' })} className={`h-8 px-3 rounded-lg border text-sm font-medium flex items-center transition cursor-pointer ${query.filter(q=>q.type==='styles').map(q=>q.data.value).includes(data.value) ? 'border-blue-500 bg-blue-50' : 'hover:border-gray-400'}`}>{data.value}</div>
+                    {colorsGroup.map((data,i)=>(
+                        <div key={i} onClick={()=>handleAddQuery({ data, type: 'color' })} className={`h-8 px-3 rounded-lg border text-sm font-medium flex items-center transition cursor-pointer gap-2 ${query.filter(q=>q.type==='color').map(q=>q.data.value).includes(data.value) ? 'border-blue-500 bg-blue-50' : 'hover:border-gray-400'}`}>
+                            <div style={{ backgroundColor: data.hex }} className={`w-3 h-3 rounded-full ${data.value==='White' && 'border'}`}></div>
+                            <span>{data.value}</span>
+                        </div>
                     ))}
                 </div>
             </div>
@@ -77,15 +85,27 @@ export default function FavColors(){
     )
     const handleAddQuery = (q) => {
         const filteredSearch = query.filter(data=>data.type!=='search');
-        setQuery(query=>filteredSearch.map(data=>data.data.value).includes(q.data.value) ? [...query.filter(q=>q.type==='search'),...filteredSearch.filter(data=>data.data.value!==q.data.value)] : [...query,q]);
+        if (q.type==='color') {
+            setQuery(filteredSearch.filter(data=>data.type!=='color'));
+            setQuery(query=>filteredSearch.map(data=>data.data.value).includes(q.data.value) ? [...query.filter(q=>q.type==='search'),...filteredSearch.filter(data=>data.data.value!==q.data.value)] : [...query,q]);
+        }else {
+            setQuery(query=>filteredSearch.map(data=>data.data.value).includes(q.data.value) ? [...query.filter(q=>q.type==='search'),...filteredSearch.filter(data=>data.data.value!==q.data.value)] : [...query,q]);
+        }
     }
     const fetchColors = async () => {
-
+        setLoadingFetch(true);
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/favorites/colors?${getQuery(query,parseInt(colors.meta.pagination.page)+1)}`,{
+            headers: {
+                Authorization: `bearer ${GetToken()}`
+            }
+        })
+        setLoadingFetch(false);
+        dispatch(setFavoriteColors({ data: [...colors.data,...data.data], meta: data.meta }));
     }
     return (
         <DashboardTemplate>
             <NavFavorites/>
-            <DashboardSearch title={'Colors'} fetchData={fetchPalettesSearch} handleRemoveSearch={handleRemoveSearch} handleChangeSearch={handleChangeSearch} query={query} filtersMenu={filtersMenu} handleSearch={handleSearch}/>
+            <DashboardSearch title={'Colors'} fetchData={fetchColorsSearch} handleRemoveSearch={handleRemoveSearch} handleChangeSearch={handleChangeSearch} query={query} filtersMenu={filtersMenu} handleSearch={handleSearch}/>
             {colors.data.length > 0 || loadingFetchSearch ? (
                 loadingFetchSearch ? (
                 <div className="grid gap-x-9 mt-10 gap-y-5 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">

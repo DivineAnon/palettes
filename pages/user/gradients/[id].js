@@ -126,9 +126,9 @@ export default function Gradient(){
                     </div>
                 </div>
                 <div className="mt-[80px] md:mt-[100px]">
-                    <div className='h-[400px] flex rounded-2xl overflow-hidden divide-x-8 divide-white'>
-                        <div style={{ backgroundImage: getGradientPreview(data.gradient) }} className='flex-1'></div>
-                        <div className='w-[200px] flex flex-col'>
+                    <div className='h-[400px] flex divide-x-8 divide-white'>
+                        <div style={{ backgroundImage: getGradientPreview(data.gradient) }} className='flex-1 rounded-2xl'></div>
+                        <div className='w-[200px] flex flex-col rounded-2xl overflow-hidden'>
                             {gradient.map(data=>data.color).map((hex,i)=>(
                                 <div onMouseLeave={()=>dispatch(setCopyPaletteIndex(null))} key={i} onClick={()=>{copyColor(hex);dispatch(setCopyPaletteIndex(i))}} style={{ backgroundColor: `#${hex}` }} className='flex-1 group relative cursor-pointer'>
                                     <span className={`${lightOrDark(hex)==='light' ? 'text-black' : 'text-white'} absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 font-medium opacity-0 group-hover:opacity-100 transition`}>{copyPaletteIndex===i ? (

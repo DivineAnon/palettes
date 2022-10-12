@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useState } from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { DashboardLoading, DashboardLoadingSearch, DashboardSearch, DashboardTemplate, NavFavorites, ProjectSaves } from "../../../components"
 import { colorsGroup, GetToken, stylesPalette } from "../../../lib"
 import { selectFavoriteProjects, setFavoriteProjects } from "../../../slices/dashboardSlice"
@@ -9,6 +9,7 @@ import { wrapper } from "../../../store"
 
 export default function FavProjects(){
     const projects = useSelector(selectFavoriteProjects);
+    const dispatch = useDispatch();
     const [query,setQuery] = useState([]);
     const [loadingFetchSearch,setLoadingFetchSearch] = useState(false);
     const [loadingFetch,setLoadingFetch] = useState(false);
@@ -17,31 +18,46 @@ export default function FavProjects(){
         if (e.target[0].value) {
             setQuery(query=>query.filter(data=>data.type!=='search'));
             setQuery(query=>[...query,{ type: 'search', value: e.target[0].value }]);
-            fetchPalettesSearch(query);
+            fetchProjectsSearch(query);
         }
+    }
+    const getQuery = (query,page) => {
+        const styles = stylesPalette.filter(data=>query.filter(data=>data.type==='styles').map(q=>q.data.value).includes(data.value));
+        const colors = query.filter(data=>data.type==='colors');
+        const search = query.find(query=>query.type==='search');
+        const queryList = [`page=${page}`];
+        if (styles.length>0) {
+            queryList.push(`styles=${styles.map(data=>data.value).join(',')}`);
+        }
+        if (colors.length>0) {
+            queryList.push(`colors=${colors.map(data=>data.data.value).join(',')}`);
+        }
+        if (search) {
+            queryList.push(`search=${search.value}`);
+        }
+        return queryList.join('&');
     }
     const handleRemoveSearch = () => {
         const newQuery = query.filter(data=>data.type!=='search');
         setQuery(newQuery);
-        fetchPalettesSearch(newQuery);
+        fetchProjectsSearch(newQuery);
     }
-    const fetchPalettesSearch = async (query) => {
-        // setLoadingFetchSearch(true);
-        // const palettes = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/saves-palettes/feed?${getQuery(query,1)
-        // }`,{
-        //     headers: {
-        //         Authorization: `bearer ${GetToken()}`
-        //     }
-        // })
-        // setLoadingFetchSearch(false);
-        // dispatch(setDashboardPalettes(palettes.data));
+    const fetchProjectsSearch = async (query) => {
+        setLoadingFetchSearch(true);
+        const projects = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/favorites/projects?${getQuery(query,1)}`,{
+            headers: {
+                Authorization: `bearer ${GetToken()}`
+            }
+        })
+        setLoadingFetchSearch(false);
+        dispatch(setFavoriteProjects(projects.data));
     }
     const handleChangeSearch = (e) => {
         setQuery(query=>query.filter(data=>data.type!=='search'));
         if (e.target.value) {
             setQuery(query=>[...query,{ type: 'search', value: e.target.value }]);
         }else {
-            fetchPalettesSearch(query.filter(data=>data.type!=='search'));
+            fetchProjectsSearch(query.filter(data=>data.type!=='search'));
         }
     }
     const handleAddQuery = (q) => {
@@ -49,7 +65,15 @@ export default function FavProjects(){
         setQuery(query=>filteredSearch.map(data=>data.data.value).includes(q.data.value) ? [...query.filter(q=>q.type==='search'),...filteredSearch.filter(data=>data.data.value!==q.data.value)] : [...query,q]);
     }
     const fetchProjects = async () => {
-        
+        setLoadingFetch(true);
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/favorites/projects?${getQuery(query,parseInt(projects.meta.pagination.page)+1)}`,{
+            headers: {
+                Authorization: `bearer ${GetToken()}`
+            }
+        })
+        setLoadingFetch(true);
+
+        dispatch(setFavoriteProjects({ data: [...projects.data,...data.data], meta: data.meta }));
     }
     const filtersMenu = () => (
         <section id="menuContainer" className="p-4">
@@ -85,7 +109,7 @@ export default function FavProjects(){
     return (
         <DashboardTemplate>
             <NavFavorites/>
-            <DashboardSearch title={'Projects'} fetchData={fetchPalettesSearch} handleRemoveSearch={handleRemoveSearch} handleChangeSearch={handleChangeSearch} query={query} filtersMenu={filtersMenu} handleSearch={handleSearch}/>
+            <DashboardSearch title={'Projects'} fetchData={fetchProjectsSearch} handleRemoveSearch={handleRemoveSearch} handleChangeSearch={handleChangeSearch} query={query} filtersMenu={filtersMenu} handleSearch={handleSearch}/>
             {projects.data.length > 0 || loadingFetchSearch ? (
                 loadingFetchSearch ? (
                 <div className="grid gap-x-9 mt-10 gap-y-5 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">

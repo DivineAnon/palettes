@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DashboardTemplate, DashboardSearch, NavFavorites, DashboardLoadingSearch, PaletteDashboard, DashboardLoading } from '../../../components';
 import { colorsGroup, GetToken, stylesPalette } from '../../../lib';
 import { selectFavoritePalettes, setFavoritePalettes } from '../../../slices/dashboardSlice';
@@ -9,6 +9,7 @@ import { wrapper } from '../../../store';
 
 export default function FavPalettes(){
     const palettes = useSelector(selectFavoritePalettes);
+    const dispatch = useDispatch();
     const [query,setQuery] = useState([]);
     const [loadingFetchSearch,setLoadingFetchSearch] = useState(false);
     const [loadingFetch,setLoadingFetch] = useState(false);
@@ -20,21 +21,36 @@ export default function FavPalettes(){
             fetchPalettesSearch(query);
         }
     }
+    const getQuery = (query,page) => {
+        const styles = stylesPalette.filter(data=>query.filter(data=>data.type==='styles').map(q=>q.data.value).includes(data.value));
+        const colors = query.filter(data=>data.type==='colors');
+        const search = query.find(query=>query.type==='search');
+        const queryList = [`page=${page}`];
+        if (styles.length>0) {
+            queryList.push(`styles=${styles.map(data=>data.value).join(',')}`);
+        }
+        if (colors.length>0) {
+            queryList.push(`colors=${colors.map(data=>data.data.value).join(',')}`);
+        }
+        if (search) {
+            queryList.push(`search=${search.value}`);
+        }
+        return queryList.join('&');
+    }
     const handleRemoveSearch = () => {
         const newQuery = query.filter(data=>data.type!=='search');
         setQuery(newQuery);
         fetchPalettesSearch(newQuery);
     }
     const fetchPalettesSearch = async (query) => {
-        // setLoadingFetchSearch(true);
-        // const palettes = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/saves-palettes/feed?${getQuery(query,1)
-        // }`,{
-        //     headers: {
-        //         Authorization: `bearer ${GetToken()}`
-        //     }
-        // })
-        // setLoadingFetchSearch(false);
-        // dispatch(setDashboardPalettes(palettes.data));
+        setLoadingFetchSearch(true);
+        const palettes = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/favorites/palettes?${getQuery(query,1)}`,{
+            headers: {
+                Authorization: `bearer ${GetToken()}`
+            }
+        })
+        dispatch(setFavoritePalettes(palettes.data));
+        setLoadingFetchSearch(false);
     }
     const handleChangeSearch = (e) => {
         setQuery(query=>query.filter(data=>data.type!=='search'));
@@ -80,7 +96,14 @@ export default function FavPalettes(){
         setQuery(query=>filteredSearch.map(data=>data.data.value).includes(q.data.value) ? [...query.filter(q=>q.type==='search'),...filteredSearch.filter(data=>data.data.value!==q.data.value)] : [...query,q]);
     }
     const fetchPalettes = async () => {
-
+        setLoadingFetch(true);
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/favorites/palettes?${getQuery(query,parseInt(palettes.meta.pagination.page)+1)}`,{
+            headers: {
+                Authorization: `bearer ${GetToken()}`
+            }
+        })
+        dispatch(setFavoritePalettes({ data: [...palettes.data,...data.data], meta: data.meta }));
+        setLoadingFetch(false);
     }
     return (
         <DashboardTemplate>

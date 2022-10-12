@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useState } from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { CollectionSaves, DashboardLoading, DashboardLoadingSearch, DashboardSearch, DashboardTemplate, NavFavorites } from "../../../components"
 import { colorsGroup, GetToken, stylesPalette } from "../../../lib"
 import { selectFavoriteCollections, setFavoriteCollections } from "../../../slices/dashboardSlice"
@@ -9,6 +9,7 @@ import { wrapper } from "../../../store"
 
 export default function FavCollections(){
     const collections = useSelector(selectFavoriteCollections);
+    const dispatch = useDispatch();
     const [query,setQuery] = useState([]);
     const [loadingFetchSearch,setLoadingFetchSearch] = useState(false);
     const [loadingFetch,setLoadingFetch] = useState(false);
@@ -17,39 +18,61 @@ export default function FavCollections(){
         if (e.target[0].value) {
             setQuery(query=>query.filter(data=>data.type!=='search'));
             setQuery(query=>[...query,{ type: 'search', value: e.target[0].value }]);
-            fetchPalettesSearch(query);
+            fetchCollectionsSearch(query);
         }
     }
     const handleRemoveSearch = () => {
         const newQuery = query.filter(data=>data.type!=='search');
         setQuery(newQuery);
-        fetchPalettesSearch(newQuery);
+        fetchCollectionsSearch(newQuery);
     }
-    const fetchPalettesSearch = async (query) => {
-        // setLoadingFetchSearch(true);
-        // const palettes = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/saves-palettes/feed?${getQuery(query,1)
-        // }`,{
-        //     headers: {
-        //         Authorization: `bearer ${GetToken()}`
-        //     }
-        // })
-        // setLoadingFetchSearch(false);
-        // dispatch(setDashboardPalettes(palettes.data));
+    const fetchCollectionsSearch = async (query) => {
+        setLoadingFetchSearch(true);
+        const collections = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/favorites/collections?${getQuery(query,1)}`,{
+            headers: {
+                Authorization: `bearer ${GetToken()}`
+            }
+        })
+        setLoadingFetchSearch(false);
+        dispatch(setFavoriteCollections(collections.data));
     }
     const handleChangeSearch = (e) => {
         setQuery(query=>query.filter(data=>data.type!=='search'));
         if (e.target.value) {
             setQuery(query=>[...query,{ type: 'search', value: e.target.value }]);
         }else {
-            fetchPalettesSearch(query.filter(data=>data.type!=='search'));
+            fetchCollectionsSearch(query.filter(data=>data.type!=='search'));
         }
     }
     const handleAddQuery = (q) => {
         const filteredSearch = query.filter(data=>data.type!=='search');
         setQuery(query=>filteredSearch.map(data=>data.data.value).includes(q.data.value) ? [...query.filter(q=>q.type==='search'),...filteredSearch.filter(data=>data.data.value!==q.data.value)] : [...query,q]);
     }
+    const getQuery = (query,page) => {
+        const styles = stylesPalette.filter(data=>query.filter(data=>data.type==='styles').map(q=>q.data.value).includes(data.value));
+        const colors = query.filter(data=>data.type==='colors');
+        const search = query.find(query=>query.type==='search');
+        const queryList = [`page=${page}`];
+        if (styles.length>0) {
+            queryList.push(`styles=${styles.map(data=>data.value).join(',')}`);
+        }
+        if (colors.length>0) {
+            queryList.push(`colors=${colors.map(data=>data.data.value).join(',')}`);
+        }
+        if (search) {
+            queryList.push(`search=${search.value}`);
+        }
+        return queryList.join('&');
+    }
     const fetchCollections = async () => {
-        
+        setLoadingFetch(true);
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/favorites/collections?${getQuery(query,parseInt(collections.meta.pagination.page)+1)}`,{
+            headers: {
+                Authorization: `bearer ${GetToken()}`
+            }
+        })
+        setLoadingFetch(true);
+        dispatch(setFavoriteCollections({ data: [...collections.data,...data.data], meta: data.meta }));
     }
     const filtersMenu = () => (
         <section id="menuContainer" className="p-4">
@@ -85,7 +108,7 @@ export default function FavCollections(){
     return (
         <DashboardTemplate>
             <NavFavorites/>
-            <DashboardSearch title={'Collections'} fetchData={fetchPalettesSearch} handleRemoveSearch={handleRemoveSearch} handleChangeSearch={handleChangeSearch} query={query} filtersMenu={filtersMenu} handleSearch={handleSearch}/>
+            <DashboardSearch title={'Collections'} fetchData={fetchCollectionsSearch} handleRemoveSearch={handleRemoveSearch} handleChangeSearch={handleChangeSearch} query={query} filtersMenu={filtersMenu} handleSearch={handleSearch}/>
             {collections.data.length > 0 || loadingFetchSearch ? (
                 loadingFetchSearch ? (
                 <div className="grid gap-x-9 mt-10 gap-y-5 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
